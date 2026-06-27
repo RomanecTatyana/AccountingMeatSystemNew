@@ -1,0 +1,6 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Accounting.ConsoleApp/Accounting.ConsoleApp.csproj" />
+    <Project Path="src/Accounting.Domain/Accounting.Domain.csproj" />
+  </Folder>
+</Solution>
