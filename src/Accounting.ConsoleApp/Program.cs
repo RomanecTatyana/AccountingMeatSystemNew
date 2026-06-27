@@ -204,6 +204,7 @@ while (true)
     Console.WriteLine("9. Показати всі довідники");
     Console.WriteLine("10. Створити надходження сировини");
     Console.WriteLine("11. Показати документи надходження сировини");
+    Console.WriteLine("12. Додати рядок в документ надходження");
     Console.WriteLine("0. Вийти");
     Console.WriteLine();
 
@@ -535,7 +536,7 @@ while (true)
 
     else if (choice == "11")
     {
-        Console.WriteLine("=== Надходження сировини ===");
+        Console.WriteLine("=== Поступлення сировини ===");
 
         if (receiptDocuments.Count == 0)
         {
@@ -548,10 +549,148 @@ while (true)
                 Console.WriteLine($"{document.Id}. {document.Number} від {document.Date:dd.MM.yyyy}");
                 Console.WriteLine($"   Постачальник: {document.Supplier.Name}");
                 Console.WriteLine($"   Склад: {document.Warehouse.Name}");
+
+                if (document.Lines.Count == 0)
+                {
+                    Console.WriteLine("   Рядків поки немає.");
+                }
+                else
+                {
+                    Console.WriteLine("   Рядки:");
+
+                    foreach (ReceiptLine line in document.Lines)
+                    {
+                        Console.WriteLine($"   {line.Id}. {line.Item.Name}, партія {line.BatchNumber}, {line.Quantity} {line.Item.Unit} × {line.Price} = {line.Amount}");
+                    }
+                }
+
                 Console.WriteLine();
             }
         }
     }
+    else if (choice == "12")
+    {
+        Console.WriteLine("=== Додавання рядка в документ надходження ===");
+
+        if (receiptDocuments.Count == 0)
+        {
+            Console.WriteLine("Спочатку створіть документ надходження сировини.");
+        }
+        else
+        {
+            Console.WriteLine("Оберіть документ надходження:");
+
+            foreach (ReceiptDocument document in receiptDocuments)
+            {
+                Console.WriteLine($"{document.Id}. {document.Number} від {document.Date:dd.MM.yyyy}");
+                Console.WriteLine($"   Постачальник: {document.Supplier.Name}");
+                Console.WriteLine($"   Склад: {document.Warehouse.Name}");
+            }
+            int documentId = int.Parse(Console.ReadLine()!);
+
+            ReceiptDocument? selectedDocument = null;
+
+            foreach (ReceiptDocument document in receiptDocuments)
+            {
+                if (document.Id == documentId)
+                {
+                    selectedDocument = document;
+                }
+            }
+
+            if (selectedDocument == null)
+            {
+                Console.WriteLine("Документ з таким Id не знайдено.");
+            }
+            else
+            {
+                Console.WriteLine();
+                Console.WriteLine("Оберіть номенклатуру:");
+
+                foreach (Item item in items)
+                {
+                    Console.WriteLine($"{item.Id}. {item.Name}, {item.Unit}, {item.Type}");
+                }
+
+                Console.WriteLine();
+
+                Console.Write("Введіть Id номенклатури: ");
+                int itemId = int.Parse(Console.ReadLine()!);
+
+                Item? selectedItem = null;
+
+                foreach (Item item in items)
+                {
+                    if (item.Id == itemId)
+                    {
+                        selectedItem = item;
+                    }
+                }
+
+                if (selectedItem == null)
+                {
+                    Console.WriteLine("Номенклатуру з таким Id не знайдено.");
+                }
+                else
+                {
+                    Console.Write("Введіть номер партії: ");
+                    string batchNumber = Console.ReadLine()!;
+
+                    Console.Write("Введіть кількість: ");
+                    decimal quantity = decimal.Parse(
+                        Console.ReadLine()!.Replace(",", "."),
+                        CultureInfo.InvariantCulture
+                    );
+
+                    Console.Write("Введіть ціну без ПДВ: ");
+                    decimal price = decimal.Parse(
+                        Console.ReadLine()!.Replace(",", "."),
+                        CultureInfo.InvariantCulture
+                    );
+
+                    if (string.IsNullOrWhiteSpace(batchNumber))
+                    {
+                        Console.WriteLine("Номер партії не може бути порожнім.");
+                    }
+                    else if (quantity <= 0)
+                    {
+                        Console.WriteLine("Кількість повинна бути більше нуля.");
+                    }
+                    else if (price <= 0)
+                    {
+                        Console.WriteLine("Ціна повинна бути більше нуля.");
+                    }
+                    else
+                    {
+                        decimal amount = quantity * price;
+
+                        int nextLineId = selectedDocument.Lines.Count + 1;
+
+                        ReceiptLine line = new ReceiptLine
+                        {
+                            Id = nextLineId,
+                            Item = selectedItem,
+                            BatchNumber = batchNumber,
+                            Quantity = quantity,
+                            Price = price,
+                            Amount = amount
+                        };
+
+                        selectedDocument.Lines.Add(line);
+
+                        Console.WriteLine();
+                        Console.WriteLine("Рядок додано до документа.");
+                        Console.WriteLine($"Документ: {selectedDocument.Number}");
+                        Console.WriteLine($"Номенклатура: {line.Item.Name}");
+                        Console.WriteLine($"Партія: {line.BatchNumber}");
+                        Console.WriteLine($"Кількість: {line.Quantity} {line.Item.Unit}");
+                        Console.WriteLine($"Ціна: {line.Price}");
+                        Console.WriteLine($"Сума: {line.Amount}");
+                    }
+                }
+            }
+        }
+}
     else if (choice == "0")
     {
         Console.WriteLine("Вихід з програми.");
