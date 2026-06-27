@@ -11,5 +11,6 @@ namespace Accounting.Domain.Entities
         public DateTime Date { get; set; }
         public Counterparty Supplier { get; set; } = new Counterparty();
         public Warehouse Warehouse { get; set; } = new Warehouse();
+        public List<ReceiptLine> Lines { get; set; } = new List<ReceiptLine>();
     }
 }
