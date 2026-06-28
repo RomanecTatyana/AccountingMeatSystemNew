@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using System.Text;
 using Accounting.Domain.Entities;
+using Accounting.Domain.Enums;
 
 Console.InputEncoding = Encoding.UTF8;
 Console.OutputEncoding = Encoding.UTF8;
@@ -78,6 +79,7 @@ new Counterparty
     Code = "87654321",
     Type = "Покупець"
 }};
+
 List<Account> accounts = new List<Account>
 {
     new Account
@@ -207,6 +209,8 @@ while (true)
     Console.WriteLine("12. Додати рядок в документ надходження");
     Console.WriteLine("13. Показати підсумок надходження");
     Console.WriteLine("14. Перевірити надходження");
+    Console.WriteLine("15. Змінити статус надходження на Posted");
+    Console.WriteLine("16. Скасувати документ надходження");
     Console.WriteLine("0 Вийти");
     Console.WriteLine();
 
@@ -548,6 +552,7 @@ while (true)
             foreach (ReceiptDocument document in receiptDocuments)
             {
                 Console.WriteLine($"{document.Id}. {document.Number} від {document.Date:dd.MM.yyyy}");
+                Console.WriteLine($"   Статус: {document.Status}");
                 Console.WriteLine($"   Постачальник: {document.Supplier.Name}");
                 Console.WriteLine($"   Склад: {document.Warehouse.Name}");
 
@@ -604,6 +609,10 @@ while (true)
             if (selectedDocument == null)
             {
                 Console.WriteLine("Документ з таким Id не знайдено.");
+            }
+            else if (selectedDocument.Status != DocumentStatus.Draft)
+            {
+                Console.WriteLine("Рядки можна додавати лише в документ зі статусом Draft.");
             }
             else
             {
@@ -799,6 +808,119 @@ while (true)
                         Console.WriteLine($"- {error}");
                     }
                 }
+            }
+        }
+    }
+    else if (choice == "15")
+    {
+        Console.WriteLine("=== Зміна статусу документа на Posted ===");
+
+        if (receiptDocuments.Count == 0)
+        {
+            Console.WriteLine("Документів поки немає.");
+        }
+
+        else
+        {
+            Console.WriteLine("Оберіть документ:");
+
+            foreach (ReceiptDocument document in receiptDocuments)
+            {
+                Console.WriteLine($"{document.Id}. {document.Number} від {document.Date:dd.MM.yyyy}, статус: {document.Status}");
+            }
+
+            Console.WriteLine();
+
+            Console.Write("Введіть Id документа: ");
+            int documentId = int.Parse(Console.ReadLine()!);
+
+            ReceiptDocument? selectedDocument = null;
+
+            foreach (ReceiptDocument document in receiptDocuments)
+            {
+                if (document.Id == documentId)
+                {
+                    selectedDocument = document;
+                }
+            }
+
+            if (selectedDocument == null)
+            {
+                Console.WriteLine("Документ з таким Id не знайдено.");
+            }
+            else if (selectedDocument.Status != DocumentStatus.Draft)
+            {
+                Console.WriteLine("У статус Posted можна перевести тільки документ у статусі Draft.");
+            }
+            else
+            {
+                List<string> errors = selectedDocument.Validate();
+
+                if (errors.Count > 0)
+                {
+                    Console.WriteLine("Документ не можна перевести у Posted, бо він має помилки:");
+
+                    foreach (string error in errors)
+                    {
+                        Console.WriteLine($"- {error}");
+                    }
+                }
+                else
+                {
+                    selectedDocument.Status = DocumentStatus.Posted;
+
+                    Console.WriteLine("Статус документа змінено на Posted.");
+                    Console.WriteLine("Увага: проводки ще не створюються. Це буде на дні 14.");
+                }
+            }
+        }
+    }
+    else if (choice == "16")
+    {
+        Console.WriteLine("=== Скасування поступлення ===");
+
+        if (receiptDocuments.Count == 0)
+        {
+            Console.WriteLine("Документів поки немає.");
+        }
+        else
+        {
+            Console.WriteLine("Оберіть документ:");
+
+            foreach (ReceiptDocument document in receiptDocuments)
+            {
+                Console.WriteLine($"{document.Id}. {document.Number} від {document.Date:dd.MM.yyyy}, статус: {document.Status}");
+            }
+
+            Console.WriteLine();
+
+            Console.Write("Введіть Id документа: ");
+            int documentId = int.Parse(Console.ReadLine()!);
+
+            ReceiptDocument? selectedDocument = null;
+
+            foreach (ReceiptDocument document in receiptDocuments)
+            {
+                if (document.Id == documentId)
+                {
+                    selectedDocument = document;
+                }
+            }
+
+            if (selectedDocument == null)
+            {
+                Console.WriteLine("Документ з таким Id не знайдено.");
+            }
+            else if (selectedDocument.Status == DocumentStatus.Cancelled)
+            {
+                Console.WriteLine("Документ вже скасовано.");
+            }
+            else
+            {
+                selectedDocument.Status = DocumentStatus.Cancelled;
+
+                Console.WriteLine("Документ скасовано.");
+                Console.WriteLine("Увага: сторнування рухів ще не робимо. Це буде пізніше.");
             }
         }
     }

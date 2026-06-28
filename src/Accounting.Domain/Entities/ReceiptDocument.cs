@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Accounting.Domain.Enums;
 
 namespace Accounting.Domain.Entities
 {
@@ -11,6 +12,7 @@ namespace Accounting.Domain.Entities
         public DateTime Date { get; set; }
         public Counterparty Supplier { get; set; } = new Counterparty();
         public Warehouse Warehouse { get; set; } = new Warehouse();
+        public DocumentStatus Status { get; set; } = DocumentStatus.Draft;
         public List<ReceiptLine> Lines { get; set; } = new List<ReceiptLine>();
         public decimal GetTotalAmount()
         {
@@ -22,6 +24,17 @@ namespace Accounting.Domain.Entities
             }
 
             return totalAmount;
+        }
+        public decimal GetTotalQuantity()
+        {
+            decimal totalQuantity = 0;
+
+            foreach (ReceiptLine line in Lines)
+            {
+                totalQuantity += line.Quantity;
+            }
+
+            return totalQuantity;
         }
         public List<string> Validate()
         {
