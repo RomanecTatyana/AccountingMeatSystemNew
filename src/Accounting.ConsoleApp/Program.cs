@@ -205,7 +205,8 @@ while (true)
     Console.WriteLine("10. Створити надходження сировини");
     Console.WriteLine("11. Показати документи надходження сировини");
     Console.WriteLine("12. Додати рядок в документ надходження");
-    Console.WriteLine("0. Вийти");
+    Console.WriteLine("13. Показати підсумок надходження");
+    Console.WriteLine("0 Вийти");
     Console.WriteLine();
 
     Console.Write("Оберіть дію:");
@@ -558,10 +559,16 @@ while (true)
                 {
                     Console.WriteLine("   Рядки:");
 
+                    decimal totalAmount = 0;
+
                     foreach (ReceiptLine line in document.Lines)
                     {
                         Console.WriteLine($"   {line.Id}. {line.Item.Name}, партія {line.BatchNumber}, {line.Quantity} {line.Item.Unit} × {line.Price} = {line.Amount}");
+
+                        totalAmount += line.Amount;
                     }
+
+                    Console.WriteLine($"   Загальна сума: {totalAmount}");
                 }
 
                 Console.WriteLine();
@@ -690,7 +697,74 @@ while (true)
                 }
             }
         }
+
 }
+    else if (choice == "13")
+    {
+        Console.WriteLine("=== Підсумок поступлення ===");
+
+        if (receiptDocuments.Count == 0)
+        {
+            Console.WriteLine("Документів поки немає.");
+        }
+        else
+        {
+            Console.WriteLine("Оберіть документ:");
+
+            foreach (ReceiptDocument document in receiptDocuments)
+            {
+                Console.WriteLine($"{document.Id}. {document.Number} від {document.Date:dd.MM.yyyy}");
+            }
+
+            Console.WriteLine();
+
+            Console.Write("Введіть Id документа: ");
+            int documentId = int.Parse(Console.ReadLine()!);
+
+            ReceiptDocument? selectedDocument = null;
+
+            foreach (ReceiptDocument document in receiptDocuments)
+            {
+                if (document.Id == documentId)
+                {
+                    selectedDocument = document;
+                }
+            }
+
+            if (selectedDocument == null)
+            {
+                Console.WriteLine("Документ з таким Id не знайдено.");
+            }
+            else if (selectedDocument.Lines.Count == 0)
+            {
+                Console.WriteLine("У документа немає рядків.");
+            }
+            else
+            {
+                decimal totalAmount = 0;
+
+                foreach (ReceiptLine line in selectedDocument.Lines)
+                {
+                    totalAmount = totalAmount + line.Amount;
+                }
+
+                VatRate selectedVatRate = vatRates[0];
+
+                decimal vatAmount = totalAmount * selectedVatRate.RatePercent / 100;
+                decimal totalWithVat = totalAmount + vatAmount;
+
+                Console.WriteLine();
+                Console.WriteLine($"Документ: {selectedDocument.Number} від {selectedDocument.Date:dd.MM.yyyy}");
+                Console.WriteLine($"Постачальник: {selectedDocument.Supplier.Name}");
+                Console.WriteLine($"Склад: {selectedDocument.Warehouse.Name}");
+                Console.WriteLine($"Кількість рядків: {selectedDocument.Lines.Count}");
+                Console.WriteLine($"Сума без ПДВ: {totalAmount}");
+                Console.WriteLine($"Ставка ПДВ: {selectedVatRate.Name}");
+                Console.WriteLine($"Сума ПДВ: {vatAmount}");
+                Console.WriteLine($"Сума з ПДВ: {totalWithVat}");
+            }
+        }
+    }
     else if (choice == "0")
     {
         Console.WriteLine("Вихід з програми.");
