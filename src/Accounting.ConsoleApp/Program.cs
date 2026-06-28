@@ -206,6 +206,7 @@ while (true)
     Console.WriteLine("11. Показати документи надходження сировини");
     Console.WriteLine("12. Додати рядок в документ надходження");
     Console.WriteLine("13. Показати підсумок надходження");
+    Console.WriteLine("14. Перевірити надходження");
     Console.WriteLine("0 Вийти");
     Console.WriteLine();
 
@@ -534,7 +535,6 @@ while (true)
             }
         }
     }
-
     else if (choice == "11")
     {
         Console.WriteLine("=== Поступлення сировини ===");
@@ -559,16 +559,12 @@ while (true)
                 {
                     Console.WriteLine("   Рядки:");
 
-                    decimal totalAmount = 0;
-
                     foreach (ReceiptLine line in document.Lines)
                     {
-                        Console.WriteLine($"   {line.Id}. {line.Item.Name}, партія {line.BatchNumber}, {line.Quantity} {line.Item.Unit} × {line.Price} = {line.Amount}");
-
-                        totalAmount += line.Amount;
+                        Console.WriteLine($"   {line.Id}. {line.Item.Name}, партія {line.BatchNumber}, {line.Quantity} {line.Item.Unit} × {line.Price} = {line.GetAmount()}");
                     }
 
-                    Console.WriteLine($"   Загальна сума: {totalAmount}");
+                    Console.WriteLine($"   Загальна сума: {document.GetTotalAmount()}");
                 }
 
                 Console.WriteLine();
@@ -679,8 +675,7 @@ while (true)
                             Item = selectedItem,
                             BatchNumber = batchNumber,
                             Quantity = quantity,
-                            Price = price,
-                            Amount = amount
+                            Price = price
                         };
 
                         selectedDocument.Lines.Add(line);
@@ -692,7 +687,7 @@ while (true)
                         Console.WriteLine($"Партія: {line.BatchNumber}");
                         Console.WriteLine($"Кількість: {line.Quantity} {line.Item.Unit}");
                         Console.WriteLine($"Ціна: {line.Price}");
-                        Console.WriteLine($"Сума: {line.Amount}");
+                        Console.WriteLine($"Сума: {line.GetAmount()}");
                     }
                 }
             }
@@ -741,12 +736,7 @@ while (true)
             }
             else
             {
-                decimal totalAmount = 0;
-
-                foreach (ReceiptLine line in selectedDocument.Lines)
-                {
-                    totalAmount = totalAmount + line.Amount;
-                }
+                decimal totalAmount = selectedDocument.GetTotalAmount();
 
                 VatRate selectedVatRate = vatRates[0];
 
@@ -762,6 +752,53 @@ while (true)
                 Console.WriteLine($"Ставка ПДВ: {selectedVatRate.Name}");
                 Console.WriteLine($"Сума ПДВ: {vatAmount}");
                 Console.WriteLine($"Сума з ПДВ: {totalWithVat}");
+            }
+        }
+    }
+    else if (choice == "14")
+    {
+        Console.WriteLine("=== Перевірка надходження ===");
+        if (receiptDocuments.Count == 0)
+        {
+            Console.WriteLine("Документів поки немає.");
+        }
+        else
+        {
+            Console.WriteLine("Оберіть документ:");
+            foreach (ReceiptDocument document in receiptDocuments)
+            {
+                Console.WriteLine($"{document.Id}. {document.Number} від {document.Date:dd.MM.yyyy}");
+            }
+            Console.WriteLine();
+            Console.Write("Введіть Id документа: ");
+            int documentId = int.Parse(Console.ReadLine()!);
+            ReceiptDocument? selectedDocument = null;
+            foreach (ReceiptDocument document in receiptDocuments)
+            {
+                if (document.Id == documentId)
+                {
+                    selectedDocument = document;
+                }
+            }
+            if (selectedDocument == null)
+            {
+                Console.WriteLine("Документ з таким Id не знайдено.");
+            }
+            else
+            {
+                List<string> errors = selectedDocument.Validate();
+                if (errors.Count == 0)
+                {
+                    Console.WriteLine("Документ пройшов перевірку без помилок.");
+                }
+                else
+                {
+                    Console.WriteLine("Документ має наступні помилки:");
+                    foreach (string error in errors)
+                    {
+                        Console.WriteLine($"- {error}");
+                    }
+                }
             }
         }
     }
