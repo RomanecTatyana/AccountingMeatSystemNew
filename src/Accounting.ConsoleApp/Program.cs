@@ -6,6 +6,8 @@ using Accounting.Domain.Enums;
 Console.InputEncoding = Encoding.UTF8;
 Console.OutputEncoding = Encoding.UTF8;
 
+//Довідники
+
 List<Item> items = new List<Item>
 {
     new Item
@@ -189,7 +191,11 @@ List<UnitOfMeasure> units = new List<UnitOfMeasure>
     },
 };
 
+//Регістри
+
 List<ReceiptDocument> receiptDocuments = new List<ReceiptDocument>();
+
+List<AccountingEntry> accountingEntries = new List<AccountingEntry>();
 
 while (true)
 {
@@ -211,6 +217,7 @@ while (true)
     Console.WriteLine("14. Перевірити надходження");
     Console.WriteLine("15. Змінити статус надходження на Posted");
     Console.WriteLine("16. Скасувати документ надходження");
+    Console.WriteLine("17. Показати проводки");
     Console.WriteLine("0 Вийти");
     Console.WriteLine();
 
@@ -813,7 +820,7 @@ while (true)
     }
     else if (choice == "15")
     {
-        Console.WriteLine("=== Зміна статусу документа на Posted ===");
+        Console.WriteLine("=== Проведення документа ===");
 
         if (receiptDocuments.Count == 0)
         {
@@ -850,7 +857,8 @@ while (true)
             }
             else if (selectedDocument.Status != DocumentStatus.Draft)
             {
-                Console.WriteLine("У статус Posted можна перевести тільки документ у статусі Draft.");
+                Console.WriteLine("Документ не можна провести повторно.");
+                Console.WriteLine($"Поточний статус документа: {selectedDocument.Status}");
             }
             else
             {
@@ -867,10 +875,73 @@ while (true)
                 }
                 else
                 {
-                    selectedDocument.Status = DocumentStatus.Posted;
+                    Account? account201 = null;
+                    Account? account631 = null;
+                    Account? account641 = null;
 
-                    Console.WriteLine("Статус документа змінено на Posted.");
-                    Console.WriteLine("Увага: проводки ще не створюються. Це буде на дні 14.");
+                    foreach (Account account in accounts)
+                    {
+                        if (account.Code == "201")
+                        {
+                            account201 = account;
+                        }
+                        else if (account.Code == "631")
+                        {
+                            account631 = account;
+                        }
+                        else if (account.Code == "641")
+                        {
+                            account641 = account;
+                        }
+                    }
+
+                    if (account201 == null || account631 == null || account641 == null)
+                    {
+                        Console.WriteLine("Не знайдено необхідні рахунки обліку для проведення документа.");
+                    }
+                    else
+                    {
+                        decimal amountWithoutVat = selectedDocument.GetTotalAmount();
+
+                        VatRate selectedVatRate = vatRates[0];
+
+                        decimal vatAmount = amountWithoutVat * selectedVatRate.RatePercent / 100;
+
+                        AccountingEntry materialEntry = new AccountingEntry
+                        {
+                            Id = accountingEntries.Count + 1,
+                            Date = selectedDocument.Date,
+                            DocumentId = selectedDocument.Id,
+                            DocumentType = "ReceiptDocument",
+                            DebitAccount = account201,
+                            CreditAccount = account631,
+                            Amount = amountWithoutVat,
+                            Description = "Оприбуткування сировини"
+                        };
+
+                        accountingEntries.Add(materialEntry);
+
+                        AccountingEntry vatEntry = new AccountingEntry
+                        {
+                            Id = accountingEntries.Count + 1,
+                            Date = selectedDocument.Date,
+                            DocumentId = selectedDocument.Id,
+                            DocumentType = "ReceiptDocument",
+                            DebitAccount = account641,
+                            CreditAccount = account631,
+                            Amount = vatAmount,
+                            Description = "Податковий кредит з ПДВ"
+                        };
+
+                        accountingEntries.Add(vatEntry);
+
+                        selectedDocument.Status = DocumentStatus.Posted;
+
+                        Console.WriteLine("Документ проведено.");
+                        Console.WriteLine("Створено проводки:");
+                        Console.WriteLine($"Дт {account201.Code} Кт {account631.Code} — {amountWithoutVat}");
+                        Console.WriteLine($"Дт {account641.Code} Кт {account631.Code} — {vatAmount}");
+                    }
                 }
             }
         }
@@ -921,6 +992,28 @@ while (true)
 
                 Console.WriteLine("Документ скасовано.");
                 Console.WriteLine("Увага: сторнування рухів ще не робимо. Це буде пізніше.");
+            }
+        }
+    }
+    else if (choice == "17")
+    {
+        Console.WriteLine("=== Проводки ===");
+
+        if (accountingEntries.Count == 0)
+        {
+            Console.WriteLine("Проводок поки немає.");
+        }
+        else
+        {
+            foreach (AccountingEntry entry in accountingEntries)
+            {
+                Console.WriteLine(
+                    $"{entry.Id}. {entry.Date:dd.MM.yyyy} " +
+                    $"Дт {entry.DebitAccount.Code} " +
+                    $"Кт {entry.CreditAccount.Code} — " +
+                    $"{entry.Amount} — " +
+                    $"{entry.Description}"
+                );
             }
         }
     }
