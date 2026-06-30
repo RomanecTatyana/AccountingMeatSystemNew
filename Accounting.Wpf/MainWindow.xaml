@@ -1,0 +1,19 @@
+﻿<Window x:Class="Accounting.Wpf.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Accounting.Wpf"
+        mc:Ignorable="d"
+        Title="Accounting Meat System" Height="600" Width="900">
+    <Grid>
+        <TextBlock>Accounting Meat System</TextBlock>
+        <TextBlock Margin="0,28,0,-29">День 15. Первый WPF-интерфейс</TextBlock>
+        <StackPanel Orientation="Vertical" Margin="0,56,0,-56">
+            <Button Content="Довідники" Width="100" Height="30" Margin="5"/>
+            <Button Content="Документи" Width="100" Height="30" Margin="5"/>
+            <Button Content="Звіти" Width="100" Height="30" Margin="5"/>
+            <Button Content="Налаштування" Width="100" Height="30" Margin="5"/>
+        </StackPanel>
+    </Grid>
+</Window>
