@@ -6,14 +6,82 @@
         xmlns:local="clr-namespace:Accounting.Wpf"
         mc:Ignorable="d"
         Title="Accounting Meat System" Height="600" Width="900">
-    <Grid>
-        <TextBlock>Accounting Meat System</TextBlock>
-        <TextBlock Margin="0,28,0,-29">День 15. Первый WPF-интерфейс</TextBlock>
-        <StackPanel Orientation="Vertical" Margin="0,56,0,-56">
-            <Button Content="Довідники" Width="100" Height="30" Margin="5"/>
-            <Button Content="Документи" Width="100" Height="30" Margin="5"/>
-            <Button Content="Звіти" Width="100" Height="30" Margin="5"/>
-            <Button Content="Налаштування" Width="100" Height="30" Margin="5"/>
+    <Grid Margin="20">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Row="0" Grid.ColumnSpan="2" Margin="0,0,0,20">
+            <TextBlock Text="Accounting Meat System"
+                       FontSize="28"
+                       FontWeight="Bold"/>
+
+            <TextBlock Text="День 16. Основы XAML"
+                       FontSize="16"/>
         </StackPanel>
+
+        <StackPanel Grid.Row="1" Grid.Column="0">
+            <Button Content="Довідники" Margin="0,0,10,10" Height="35"/>
+            <Button Content="Документи" Margin="0,0,10,10" Height="35"/>
+            <Button Content="Звіти" Margin="0,0,10,10" Height="35"/>
+            <Button Content="Налаштування" Margin="0,0,10,10" Height="35"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Grid.Column="1">
+
+            <StackPanel Grid.Row="1" Grid.Column="1">
+
+                <TextBlock Text="Надходження сировини"
+               FontSize="22"
+               FontWeight="Bold"
+               Margin="0,0,0,20"/>
+
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                    <TextBlock Text="Номер документа:"
+                   Width="130"
+                   VerticalAlignment="Center"/>
+                    <TextBox Width="250"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                    <TextBlock Text="Постачальник:"
+                   Width="130"
+                   VerticalAlignment="Center"/>
+                    <TextBox Width="250"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                    <TextBlock Text="Склад:"
+                   Width="130"
+                   VerticalAlignment="Center"/>
+                    <TextBox Width="250"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal">
+                    <Button Content="Зберегти"
+                Width="100"
+                Height="35"
+                Margin="0,0,10,0"/>
+
+                    <Button Content="Провести"
+                Width="100"
+                Height="35"
+                Margin="0,0,10,0"/>
+
+                    <Button Content="Очистити"
+                Width="100"
+                Height="35"/>
+                </StackPanel>
+
+            </StackPanel>
+        </StackPanel>
+
     </Grid>
 </Window>
