@@ -20,5 +20,12 @@ namespace Accounting.Wpf
         {
             InitializeComponent();
         }
+        private void OpenReceiptWindow_Click(object sender, RoutedEventArgs e)
+        {
+            ReceiptWindow receiptWindow = new ReceiptWindow();
+            receiptWindow.Show();
+        }
     }
+
+
 }
