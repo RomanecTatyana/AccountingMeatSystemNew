@@ -36,6 +36,11 @@
                     Margin="0,0,10,10" 
                     Height="35"         
                     Click="OpenReceiptWindow_Click"/>
+            <Button Content="Довідник номенклатури"
+                    Margin="0,0,10,10"
+                    Height="35"
+                    Click="OpenItemsWindow_Click"/>
+
         </StackPanel>
 
         <StackPanel Grid.Row="1" Grid.Column="1">

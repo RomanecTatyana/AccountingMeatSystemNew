@@ -25,6 +25,12 @@ namespace Accounting.Wpf
             ReceiptWindow receiptWindow = new ReceiptWindow();
             receiptWindow.Show();
         }
+
+        private void OpenItemsWindow_Click(object sender, RoutedEventArgs e)
+        {
+            ItemsWindow itemsWindow = new ItemsWindow();
+            itemsWindow.Show();
+        }
     }
 
 
