@@ -29,27 +29,27 @@
                     <TextBlock Text="Дата документа:"
                         Width="130"
                         VerticalAlignment="Center"/>
-                    <DatePicker Width="250"/>
+                    <DatePicker Width="250" SelectedDate="{Binding DocumentDate}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                     <TextBlock Text="Номер документа:"
                Width="130"
                VerticalAlignment="Center"/>
-                    <TextBox Width="250"/>
+                    <TextBox Width="250" Text="{Binding Number}"/>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                     <TextBlock Text="Постачальник:"
                Width="130"
                VerticalAlignment="Center"/>
-                    <TextBox Width="250"/>
+                    <TextBox Width="250" Text="{Binding SupplierName}"/>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
                     <TextBlock Text="Склад:"
                Width="130"
                VerticalAlignment="Center"/>
-                    <TextBox Width="250"/>
+                    <TextBox Width="250" Text="{Binding WarehouseName}"/>
                 </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
                 <TextBlock Text="Коментар:"
@@ -58,7 +58,7 @@
                 <TextBox Width="250"
              Height="70"
              TextWrapping="Wrap"
-             AcceptsReturn="True"/>
+             AcceptsReturn="True" Text="{Binding Comment}"/>
             </StackPanel>
 
 

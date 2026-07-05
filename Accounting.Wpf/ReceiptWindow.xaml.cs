@@ -20,7 +20,19 @@ namespace Accounting.Wpf
         public ReceiptWindow()
         {
             InitializeComponent();
+
+            ReceiptDraft receiptDraft = new ReceiptDraft
+            {
+                DocumentDate = DateTime.Today,
+                Number = "ВХ-0001",
+                SupplierName = "Тестовий постачальник",
+                WarehouseName = "Сировинний склад",
+                Comment = "Навчальний документ"
+            };
+
+            DataContext = receiptDraft;
         }
+
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("Збереження документа буде додано пізніше.");
@@ -35,5 +47,14 @@ namespace Accounting.Wpf
         {
             Close();
         }
+    }
+
+    public class ReceiptDraft
+    {
+        public string Number { get; set; } = "";
+        public DateTime DocumentDate { get; set; }
+        public string SupplierName { get; set; } = "";
+        public string WarehouseName { get; set; } = "";
+        public string Comment { get; set; } = "";
     }
 }
