@@ -1,15 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows;
 
 namespace Accounting.Wpf
 {
     public partial class ItemsWindow : Window
     {
-        public ItemsWindow()
-        {
-            InitializeComponent();
-
-            List<ItemRow> items = new List<ItemRow>
+        private ObservableCollection<ItemRow> items = new ObservableCollection<ItemRow>
             {
                 new ItemRow { Code = "001", Name = "Свинина", Unit = "кг", Group = "Сировина" },
                 new ItemRow { Code = "002", Name = "Яловичина", Unit = "кг", Group = "Сировина" },
@@ -18,6 +15,9 @@ namespace Accounting.Wpf
                 new ItemRow { Code = "005", Name = "Ящик пластиковий", Unit = "шт", Group = "Тара" },
                 new ItemRow { Code = "006", Name = "Ковбаса варена", Unit = "кг", Group = "Готова продукція" }
             };
+        public ItemsWindow()
+        {
+            InitializeComponent();
 
             ItemsDataGrid.ItemsSource = items;
         }
@@ -25,6 +25,35 @@ namespace Accounting.Wpf
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        private void AddButton_Click(object sender, RoutedEventArgs e)
+        {
+            string code = CodeTextBox.Text.Trim();
+            string name = NameTextBox.Text.Trim();
+            string unit = UnitTextBox.Text.Trim();
+            string group = GroupTextBox.Text.Trim();
+
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                MessageBox.Show("Вкажіть назву номенклатури.");
+                return;
+            }
+
+            ItemRow newItem = new ItemRow
+            {
+                Code = code,
+                Name = name,
+                Unit = unit,
+                Group = group
+            };
+
+            items.Add(newItem);
+
+            CodeTextBox.Clear();
+            NameTextBox.Clear();
+            UnitTextBox.Clear();
+            GroupTextBox.Clear();
         }
     }
 

@@ -11,6 +11,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0">
@@ -46,8 +47,51 @@
 
         </DataGrid>
 
-        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Content="Додати" Width="100" Height="35" Margin="0,0,10,0"/>
+        <StackPanel Grid.Row="2" Orientation="Vertical">
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                <TextBlock Text="Код:"
+                    Width="130"
+                    VerticalAlignment="Top"/>
+                <TextBox x:Name="CodeTextBox"
+                    Width="250"
+                    TextWrapping="Wrap"
+                    AcceptsReturn="True"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                <TextBlock Text="Назва:"
+                    Width="130"
+                    VerticalAlignment="Top"/>
+                <TextBox x:Name="NameTextBox" 
+                    Width="250"
+                    TextWrapping="Wrap"
+                    AcceptsReturn="True"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                <TextBlock Text="Одиниця:"
+                    Width="130"
+                    VerticalAlignment="Top"/>
+                <TextBox x:Name="UnitTextBox" 
+                    Width="250"
+                    TextWrapping="Wrap"
+                    AcceptsReturn="True"/> 
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Група:"
+                    Width="130"
+                    VerticalAlignment="Top"/>
+                <TextBox x:Name="GroupTextBox" 
+                    Width="250"
+                    TextWrapping="Wrap"
+                    AcceptsReturn="True"/>
+            </StackPanel>
+        </StackPanel>
+        
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="Додати" 
+                    Width="100" 
+                    Height="35" 
+                    Margin="0,0,10,0"
+                    Click="AddButton_Click"/>
             <Button Content="Змінити" Width="100" Height="35" Margin="0,0,10,0"/>
             <Button Content="Закрити" 
                     Width="100" 
