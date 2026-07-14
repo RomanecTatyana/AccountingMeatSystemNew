@@ -27,7 +27,7 @@ namespace Accounting.Wpf
         }
 
         private void OpenItemsWindow_Click(object sender, RoutedEventArgs e)
-        {
+        { 
             ItemsWindow itemsWindow = new ItemsWindow();
             itemsWindow.Show();
         }
