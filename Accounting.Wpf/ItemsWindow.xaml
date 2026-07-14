@@ -21,28 +21,27 @@
         </StackPanel>
 
         <DataGrid Grid.Row="1"
-                  x:Name="ItemsDataGrid"
-                  AutoGenerateColumns="False"
-                  IsReadOnly="True"
-                  CanUserAddRows="False"
-                  Margin="0,20,0,20">
+          x:Name="ItemsDataGrid"
+          ItemsSource="{Binding Items}"
+          AutoGenerateColumns="False"
+          Margin="10">
 
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Код"
-                                    Binding="{Binding Code}"
-                                    Width="80"/>
+                            Binding="{Binding Code}"
+                            Width="80"/>
 
                 <DataGridTextColumn Header="Назва"
-                                    Binding="{Binding Name}"
-                                    Width="*"/>
+                            Binding="{Binding Name}"
+                            Width="*"/>
 
                 <DataGridTextColumn Header="Одиниця"
-                                    Binding="{Binding Unit}"
-                                    Width="100"/>
+                            Binding="{Binding Unit}"
+                            Width="100"/>
 
                 <DataGridTextColumn Header="Група"
-                                    Binding="{Binding Group}"
-                                    Width="180"/>
+                            Binding="{Binding Group}"
+                            Width="180"/>
             </DataGrid.Columns>
 
         </DataGrid>
