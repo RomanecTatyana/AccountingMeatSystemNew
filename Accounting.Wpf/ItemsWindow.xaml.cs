@@ -20,24 +20,5 @@ namespace Accounting.Wpf
         {
             Close();
         }
-
-        private void AddButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (DataContext is ItemsViewModel viewModel)
-            {
-                viewModel.Items.Add(new ItemRow
-                {
-                    Code = CodeTextBox.Text,
-                    Name = NameTextBox.Text,
-                    Unit = UnitTextBox.Text,
-                    Group = GroupTextBox.Text
-                });
-
-                CodeTextBox.Clear();
-                NameTextBox.Clear();
-                UnitTextBox.Clear();
-                GroupTextBox.Clear();
-            }
-        }
     }
 }
