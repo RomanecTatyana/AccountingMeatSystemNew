@@ -21,6 +21,9 @@ namespace Accounting.Wpf.ViewModels
         [ObservableProperty]
         private string newGroup = "";
 
+        [ObservableProperty]
+        private string statusMessage = "";
+
         public ItemsViewModel()
         {
             Items = new ObservableCollection<ItemRow>
@@ -51,6 +54,11 @@ namespace Accounting.Wpf.ViewModels
         [RelayCommand]
         private void AddItem()
         {
+            if (string.IsNullOrWhiteSpace(NewName))
+            {
+                StatusMessage = "Введіть назву номенклатури";
+                return;
+            }
             Items.Add(new ItemRow
             {
                 Code = NewCode,
@@ -63,6 +71,17 @@ namespace Accounting.Wpf.ViewModels
             NewName = "";
             NewUnit = "";
             NewGroup = "";
+        }
+
+        [RelayCommand]
+        private void Save()
+        {
+            if (Items.Count == 0)
+            {
+                StatusMessage = "Немає даних для збереження";
+                return;
+            }
+            StatusMessage = $"Збережено позицій: {Items.Count}";
         }
     }
 }

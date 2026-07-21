@@ -90,12 +90,23 @@
         </StackPanel>
         
         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
+            <TextBlock Text="{Binding StatusMessage}"
+                    Margin="10"
+                    FontWeight="SemiBold" />
             <Button Content="Додати" 
                     Width="100" 
                     Height="35" 
                     Margin="0,0,10,0"
                     Command="{Binding AddItemCommand}"/>
-            <Button Content="Змінити" Width="100" Height="35" Margin="0,0,10,0"/>
+            <Button Content="Змінити"
+                    Width="100"
+                    Height="35" 
+                    Margin="0,0,10,0"/>
+            <Button Content="Зберегти"
+                    Width="100"
+                    Height="35" 
+                    Margin="0,0,10,0"
+                    Command="{Binding SaveCommand}"/>
             <Button Content="Закрити" 
                     Width="100" 
                     Height="35" 
