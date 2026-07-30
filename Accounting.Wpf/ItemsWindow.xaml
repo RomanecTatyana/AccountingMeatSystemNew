@@ -93,6 +93,9 @@
             <TextBlock Text="{Binding StatusMessage}"
                     Margin="10"
                     FontWeight="SemiBold" />
+            <TextBlock Text="{Binding ErrorMessage}"
+                    Margin="10"
+                    FontWeight="SemiBold" />
             <Button Content="Додати" 
                     Width="100" 
                     Height="35" 
