@@ -23,5 +23,15 @@ namespace Accounting.Wpf
             ItemsWindow itemsWindow = new ItemsWindow();
             itemsWindow.Show();
         }
+        private void OpenCounterpartiesWindow_Click(object sender, RoutedEventArgs e)
+        {
+            CounterpartiesWindow counterpartiesWindow = new CounterpartiesWindow();
+            counterpartiesWindow.Show();
+        }
+        private void OpenWarehousesWindow_Click(object sender, RoutedEventArgs e)
+        {
+            WarehousesWindow warehousesWindow = new WarehousesWindow();
+            warehousesWindow.Show();
+        }
     }
 }

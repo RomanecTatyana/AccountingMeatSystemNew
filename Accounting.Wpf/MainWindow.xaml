@@ -28,19 +28,32 @@
         </StackPanel>
 
         <StackPanel Grid.Row="1" Grid.Column="0">
-            <Button Content="Довідники" Margin="0,0,10,10" Height="35"/>
-            <Button Content="Документи" Margin="0,0,10,10" Height="35"/>
-            <Button Content="Звіти" Margin="0,0,10,10" Height="35"/>
-            <Button Content="Налаштування" Margin="0,0,10,10" Height="35"/>
-            <Button Content="Надходження сировини" 
-                    Margin="0,0,10,10" 
-                    Height="35"         
-                    Click="OpenReceiptWindow_Click"/>
+            <TextBlock Text="Довідники"
+                       Margin="0,0,0,5"
+                       FontSize="18"
+                       FontWeight="Bold"/>
             <Button Content="Довідник номенклатури"
                     Margin="0,0,10,10"
                     Height="35"
                     Click="OpenItemsWindow_Click"/>
-
+            <Button Content="Довідник контрагентів"
+                    Margin="0,0,10,10"
+                    Height="35"
+                    Click="OpenCounterpartiesWindow_Click"/>
+            <Button Content="Довідник складів"
+                    Margin="0,0,10,10"
+                    Height="35"
+                    Click="OpenWarehousesWindow_Click"/>
+            <TextBlock Text="Документи"
+                       Margin="0,0,0,5"
+                       FontSize="18"
+                       FontWeight="Bold"/>
+            <Button Content="Надходження сировини" 
+                    Margin="0,0,10,10" 
+                    Height="35"         
+                    Click="OpenReceiptWindow_Click"/>
+            <Button Content="Звіти" Margin="0,0,10,10" Height="35"/>
+            <Button Content="Налаштування" Margin="0,0,10,10" Height="35"/>
         </StackPanel>
 
         <StackPanel Grid.Row="1" Grid.Column="1">
