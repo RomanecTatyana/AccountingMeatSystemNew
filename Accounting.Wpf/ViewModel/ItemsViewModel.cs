@@ -2,6 +2,7 @@
 using Accounting.Wpf.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using System.Linq;
 
 namespace Accounting.Wpf.ViewModels
 {
@@ -23,6 +24,9 @@ namespace Accounting.Wpf.ViewModels
 
         [ObservableProperty]
         private string statusMessage = "";
+
+        [ObservableProperty]
+        private string errorMessage = "";
 
         public ItemsViewModel()
         {
@@ -54,9 +58,9 @@ namespace Accounting.Wpf.ViewModels
         [RelayCommand]
         private void AddItem()
         {
-            if (string.IsNullOrWhiteSpace(NewName))
+            if (!ValidateNewItem())
             {
-                StatusMessage = "Введіть назву номенклатури";
+                StatusMessage = "";
                 return;
             }
             Items.Add(new ItemRow
@@ -71,6 +75,8 @@ namespace Accounting.Wpf.ViewModels
             NewName = "";
             NewUnit = "";
             NewGroup = "";
+            ErrorMessage = "";
+            StatusMessage = "Позицію додано";
         }
 
         [RelayCommand]
@@ -78,10 +84,49 @@ namespace Accounting.Wpf.ViewModels
         {
             if (Items.Count == 0)
             {
-                StatusMessage = "Немає даних для збереження";
+                ErrorMessage = "Немає даних для збереження";
+                StatusMessage = "";
                 return;
             }
-            StatusMessage = $"Збережено позицій: {Items.Count}";
+            else
+            {
+                ErrorMessage = "";
+                StatusMessage = $"Збережено позицій: {Items.Count}";
+            }
+        }
+
+        private bool ValidateNewItem()
+        {
+            if (string.IsNullOrWhiteSpace(NewCode))
+            {
+                ErrorMessage = "Введіть код номенклатури";
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(NewName))
+            {
+                ErrorMessage = "Введіть назву номенклатури";
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(NewUnit))
+            {
+                ErrorMessage = "Введіть одиницю виміру";
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(NewGroup))
+            {
+                ErrorMessage = "Введіть групу номенклатури";
+                return false;
+            }
+
+            if (Items.Any(item => item.Code == NewCode))
+            {
+                ErrorMessage = "Номенклатура з таким кодом вже існує";
+                return false;
+            }
+            return true;
         }
     }
 }
