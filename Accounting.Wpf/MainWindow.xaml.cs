@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using Accounting.Wpf.ViewModel;
+using Accounting.Wpf.Views;
 
 namespace Accounting.Wpf
 {

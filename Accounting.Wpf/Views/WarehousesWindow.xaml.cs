@@ -1,4 +1,5 @@
 ﻿using Accounting.Wpf.ViewModel;
+using Accounting.Wpf.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,17 +12,17 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace Accounting.Wpf
+namespace Accounting.Wpf.Views
 {
     /// <summary>
-    /// Interaction logic for CounterpartiesWindow.xaml
+    /// Interaction logic for WarehousesWindow.xaml
     /// </summary>
-    public partial class CounterpartiesWindow : Window
+    public partial class WarehousesWindow : Window
     {
-        public CounterpartiesWindow()
+        public WarehousesWindow()
         {
             InitializeComponent();
-            DataContext = new CounterpartiesViewModel();
+            DataContext = new WarehousesViewModel();
         }
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
