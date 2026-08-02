@@ -10,7 +10,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace Accounting.Wpf
+namespace Accounting.Wpf.Views
 {
     /// <summary>
     /// Interaction logic for ReceiptWindow.xaml
