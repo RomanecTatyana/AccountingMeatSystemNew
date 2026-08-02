@@ -1,5 +1,5 @@
 ﻿using System.Collections.ObjectModel;
-using Accounting.Wpf.Models;
+using Accounting.Domain.Entities;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Linq;
@@ -8,7 +8,7 @@ namespace Accounting.Wpf.ViewModels
 {
     public partial class ItemsViewModel : ObservableObject
     {
-        public ObservableCollection<ItemRow> Items { get; set; }
+        public ObservableCollection<Item> Items { get; set; }
 
         [ObservableProperty]
         private string newCode = "";
@@ -30,23 +30,23 @@ namespace Accounting.Wpf.ViewModels
 
         public ItemsViewModel()
         {
-            Items = new ObservableCollection<ItemRow>
+            Items = new ObservableCollection<Item>
             {
-                new ItemRow
+                new Item
                 {
                     Code = "001",
                     Name = "Свинина",
                     Unit = "кг",
                     Group = "Сировина"
                 },
-                new ItemRow
+                new Item
                 {
                     Code = "002",
                     Name = "Яловичина",
                     Unit = "кг",
                     Group = "Сировина"
                 },
-                new ItemRow
+                new Item
                 {
                     Code = "003",
                     Name = "Сіль",
@@ -63,7 +63,7 @@ namespace Accounting.Wpf.ViewModels
                 StatusMessage = "";
                 return;
             }
-            Items.Add(new ItemRow
+            Items.Add(new Item
             {
                 Code = NewCode,
                 Name = NewName,

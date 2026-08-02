@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using Accounting.Wpf.Models;
+using Accounting.Domain.Entities;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -7,7 +8,7 @@ namespace Accounting.Wpf.ViewModel
 {
     public partial class WarehousesViewModel : ObservableObject
     {
-        public ObservableCollection<WarehouseRow> Warehouses { get; set; }
+        public ObservableCollection<Warehouse> Warehouses { get; set; }
 
         [ObservableProperty]
         private string newCode = "";
@@ -20,15 +21,15 @@ namespace Accounting.Wpf.ViewModel
 
         public WarehousesViewModel()
         {
-            Warehouses = new ObservableCollection<WarehouseRow>
+            Warehouses = new ObservableCollection<Warehouse>
             {
-                new WarehouseRow
+                new Warehouse
                 {
                     Code = "001",
                     Name = "Сировинний склад",
                     Type = "Сировина"
                 },
-                new WarehouseRow
+                new Warehouse
                 {
                     Code = "002",
                     Name = "Склад готової продукції",
