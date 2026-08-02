@@ -12,34 +12,34 @@ List<Item> items = new List<Item>
 {
     new Item
 {
-    Id = 1,
+    Code = "001",
     Name = "Свинина",
     Unit = "кг",
-    Type = "Сировина"
+    Group = "Сировина"
 },
 
     new Item
 {
-    Id = 2,
+    Code = "002",
     Name = "Сіль",
     Unit = "кг",
-    Type = "Матеріал"
+    Group = "Матеріали"
 },
 
 new Item
 {
-    Id = 3,
+    Code = "003",
     Name = "Ковбаса",
     Unit = "кг",
-    Type = "Готова продукція"
+    Group = "Готова продукція"
 },
 
 new Item
 {
-    Id = 4,
+    Code = "004",
     Name = "Фарш",
     Unit = "кг",
-    Type = "Готова продукція"
+    Group = "Готова продукція"
 }
 };
 
@@ -48,18 +48,16 @@ List<Warehouse> warehouses = new List<Warehouse>
 
 new Warehouse
 {
-    Id = 1,
+    Code = "001",
     Name = "Сировинний склад",
-    Address = "Цех 1",
-    ResponsiblePerson = "Комірник Іваненко"
+    Type = "Цех 1"
 },
 
 new Warehouse
 {
-    Id = 2,
+    Code = "002",
     Name = "Склад готової продукції",
-    Address = "Цех 2",
-    ResponsiblePerson = "Комірник Петренко"
+    Type = "Цех 2"
 }
 };
 
@@ -68,70 +66,56 @@ List<Counterparty> counterparties = new List<Counterparty>
 
 new Counterparty
 {
-    Id = 1,
+    Code = "001",
     Name = "ТОВ М'ясний постачальник",
-    Code = "12345678",
-    Type = "Постачальник"
+    Type = "Постачальник",
+    TaxNumber = "87654321",
 },
 
 new Counterparty
 {
-    Id = 2,
+    Code = "002",
     Name = "ТОВ Магазин №1",
-    Code = "87654321",
-    Type = "Покупець"
+    Type = "Покупець",
+    TaxNumber = "87654321"
 }};
 
 List<Account> accounts = new List<Account>
 {
     new Account
     {
-        Id = 1,
         Code = "201",
-        Name = "Сировина і матеріали",
-        Type = "Активний"
+        Name = "Сировина і матеріали"
     },
     new Account
     {
-        Id = 2,
         Code = "23",
-        Name = "Виробництво",
-        Type = "Активний"
+        Name = "Виробництво"
     },
     new Account
     {
-        Id = 3,
         Code = "26",
-        Name = "Готова продукція",
-        Type = "Активний"
+        Name = "Готова продукція"
     },
     new Account
     {
-        Id = 4,
         Code = "631",
-        Name = "Розрахунки з постачальниками",
-        Type = "Пасивний"
+        Name = "Розрахунки з постачальниками"
     },
     new Account
     {
-        Id = 5,
         Code = "641",
-        Name = "Розрахунки за податками",
-        Type = "Активно-пасивний"
+        Name = "Розрахунки за податками"
     },
     new Account
     {
-        Id = 6,
         Code = "701",
-        Name = "Дохід від реалізації",
-        Type = "Активний"
+        Name = "Дохід від реалізації"
     },
     new Account
     {
-        Id = 7,
         Code = "901",
-        Name = "Собівартість реалізації",
-        Type = "Пасивний"
+        Name = "Собівартість реалізації"
     },
 };
 
@@ -232,7 +216,7 @@ while (true)
 
         foreach (Item item in items)
         {
-            Console.WriteLine($"{item.Id}. {item.Name}, {item.Unit}, {item.Type}");
+            Console.WriteLine($"{item.Code}. {item.Name}, {item.Unit}, {item.Group}");
         }
     }
     else if (choice == "2")
@@ -278,14 +262,12 @@ while (true)
             }
             else
             {
-                int nextId = items.Count + 1;
-
                 Item newItem = new Item
                 {
-                    Id = nextId,
+                    Code = "1",
                     Name = name,
                     Unit = unit,
-                    Type = type
+                    Group = type
                 };
 
                 items.Add(newItem);
@@ -300,7 +282,7 @@ while (true)
 
         foreach (Warehouse warehouse in warehouses)
         {
-            Console.WriteLine($"{warehouse.Id}, {warehouse.Name}, {warehouse.Address}, {warehouse.ResponsiblePerson}");
+            Console.WriteLine($"{warehouse.Code}, {warehouse.Name}, {warehouse.Type}");
         }
     }
     else if (choice == "4")
@@ -309,7 +291,7 @@ while (true)
 
         foreach (Counterparty counterparty in counterparties)
         {
-            Console.WriteLine($"{counterparty.Id}. {counterparty.Name}, {counterparty.Code}, {counterparty.Type}");
+            Console.WriteLine($"{counterparty.Code}. {counterparty.Name}, {counterparty.Type}, {counterparty.TaxNumber}");
         }
     }
     else if (choice == "5")
@@ -320,19 +302,19 @@ while (true)
 
         foreach (Item item in items)
         {
-            Console.WriteLine($"{item.Id}. {item.Name}, {item.Unit}, {item.Type}");
+            Console.WriteLine($"{item.Code}. {item.Name}, {item.Unit}, {item.Group}");
         }
 
         Console.WriteLine();
 
-        Console.Write("Введіть Id номенклатури: ");
-        int itemId = int.Parse(Console.ReadLine()!);
+        Console.Write("Введіть Code номенклатури: ");
+        string itemId = Console.ReadLine()!;
 
         Item? selectedItem = null;
 
         foreach (Item item in items)
         {
-            if (item.Id == itemId)
+            if (item.Code == itemId)
             {
                 selectedItem = item;
             }
@@ -391,7 +373,7 @@ while (true)
 
         foreach (Account account in accounts)
         {
-            Console.WriteLine($"{account.Id}. {account.Code} — {account.Name}, {account.Type}");
+            Console.WriteLine($"{account.Code}. {account.Name}");
         }
     }
     else if (choice == "7")
@@ -418,28 +400,28 @@ while (true)
 
         foreach (Item item in items)
         {
-            Console.WriteLine($"{item.Id}. {item.Name}, {item.Unit}, {item.Type}");
+            Console.WriteLine($"{item.Code}. {item.Name}, {item.Unit}, {item.Group}");
         };
         Console.WriteLine();
         Console.WriteLine("=== Склади ===");
 
         foreach (Warehouse warehouse in warehouses)
         {
-            Console.WriteLine($"{warehouse.Id}, {warehouse.Name}, {warehouse.Address}, {warehouse.ResponsiblePerson}");
+            Console.WriteLine($"{warehouse.Code}, {warehouse.Name}, {warehouse.Type}");
         };
         Console.WriteLine();
         Console.WriteLine("=== Контрагенти ===");
 
         foreach (Counterparty counterparty in counterparties)
         {
-            Console.WriteLine($"{counterparty.Id}. {counterparty.Name}, {counterparty.Code}, {counterparty.Type}");
+            Console.WriteLine($"{counterparty.Code}. {counterparty.Name}, {counterparty.Type}, {counterparty.TaxNumber}");
         };
         Console.WriteLine();
         Console.WriteLine("=== Рахунки обліку ===");
 
         foreach (Account account in accounts)
         {
-            Console.WriteLine($"{account.Id}. {account.Code} — {account.Name}, {account.Type}");
+            Console.WriteLine($"{account.Code}. {account.Name}");
         };
         Console.WriteLine();
         Console.WriteLine("=== Ставки ПДВ ===");
@@ -479,16 +461,16 @@ while (true)
 
         foreach (Counterparty counterparty in counterparties)
         {
-            Console.WriteLine($"{counterparty.Id}. {counterparty.Name}, {counterparty.Code}, {counterparty.Type}");
+            Console.WriteLine($"{counterparty.Code}. {counterparty.Name}, {counterparty.Type}, {counterparty.TaxNumber}");
         }
 
-        int supplierId = int.Parse(Console.ReadLine()!);
+        string supplierId = Console.ReadLine()!;
 
         Counterparty? selectedSupplier = null;
 
         foreach (Counterparty counteraparty in counterparties)
         {
-            if (counteraparty.Id == supplierId)
+            if (counteraparty.Code == supplierId)
             {
                 selectedSupplier = counteraparty;
             }
@@ -505,16 +487,16 @@ while (true)
 
             foreach (Warehouse warehouse in warehouses)
             {
-                Console.WriteLine($"{warehouse.Id}. {warehouse.Name}, {warehouse.Address}, {warehouse.ResponsiblePerson}");
+                Console.WriteLine($"{warehouse.Code}. {warehouse.Name}, {warehouse.Type}");
             }
 
-            int warehouseId = int.Parse(Console.ReadLine()!);
+            string warehouseId = Console.ReadLine()!;
 
             Warehouse? selectedWarehouse = null;
 
             foreach (Warehouse warehouse in warehouses)
             {
-                if (warehouse.Id == warehouseId)
+                if (warehouse.Code == warehouseId)
                 {
                     selectedWarehouse = warehouse;
                 }
@@ -628,19 +610,19 @@ while (true)
 
                 foreach (Item item in items)
                 {
-                    Console.WriteLine($"{item.Id}. {item.Name}, {item.Unit}, {item.Type}");
+                    Console.WriteLine($"{item.Code}. {item.Name}, {item.Unit}, {item.Group}");
                 }
 
                 Console.WriteLine();
 
                 Console.Write("Введіть Id номенклатури: ");
-                int itemId = int.Parse(Console.ReadLine()!);
+                string itemId = Console.ReadLine()!;
 
                 Item? selectedItem = null;
 
                 foreach (Item item in items)
                 {
-                    if (item.Id == itemId)
+                    if (item.Code == itemId)
                     {
                         selectedItem = item;
                     }
