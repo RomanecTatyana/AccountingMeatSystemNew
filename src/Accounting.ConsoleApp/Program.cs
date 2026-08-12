@@ -3,6 +3,9 @@ using System.Text;
 using Accounting.Domain.Accounting;
 using Accounting.Domain.Entities;
 using Accounting.Domain.Enums;
+using Accounting.Domain.Inventory;
+using Accounting.Domain.Services;
+
 
 Console.InputEncoding = Encoding.UTF8;
 Console.OutputEncoding = Encoding.UTF8;
@@ -181,6 +184,8 @@ List<UnitOfMeasure> units = new List<UnitOfMeasure>
 List<ReceiptDocument> receiptDocuments = new List<ReceiptDocument>();
 
 List<AccountingEntry> accountingEntries = new List<AccountingEntry>();
+
+List<InventoryMovement> inventoryMovements = new List<InventoryMovement>();
 
 while (true)
 {
@@ -845,86 +850,38 @@ while (true)
             }
             else
             {
-                List<string> errors = selectedDocument.Validate();
+                PostingService postingService = new PostingService();
 
-                if (errors.Count > 0)
+                PostingResult postingResult = postingService.PostReceipt(selectedDocument);
+
+                if (!postingResult.IsSuccess)
                 {
-                    Console.WriteLine("Документ не можна перевести у Posted, бо він має помилки:");
+                    Console.WriteLine("Документ не можна провести, бо він має помилки:");
 
-                    foreach (string error in errors)
+                    foreach (string error in postingResult.Errors)
                     {
                         Console.WriteLine($"- {error}");
                     }
                 }
                 else
                 {
-                    Account? account201 = null;
-                    Account? account631 = null;
-                    Account? account641 = null;
-
-                    foreach (Account account in accounts)
+                    foreach (InventoryMovement movement in postingResult.InventoryMovements)
                     {
-                        if (account.Code == "201")
-                        {
-                            account201 = account;
-                        }
-                        else if (account.Code == "631")
-                        {
-                            account631 = account;
-                        }
-                        else if (account.Code == "641")
-                        {
-                            account641 = account;
-                        }
+                        movement.Id = inventoryMovements.Count + 1;
+                        inventoryMovements.Add(movement);
                     }
 
-                    if (account201 == null || account631 == null || account641 == null)
+                    foreach (AccountingEntry entry in postingResult.AccountingEntries)
                     {
-                        Console.WriteLine("Не знайдено необхідні рахунки обліку для проведення документа.");
+                        entry.Id = accountingEntries.Count + 1;
+                        accountingEntries.Add(entry);
                     }
-                    else
-                    {
-                        decimal amountWithoutVat = selectedDocument.GetTotalAmount();
 
-                        VatRate selectedVatRate = vatRates[0];
+                    selectedDocument.Status = DocumentStatus.Posted;
 
-                        decimal vatAmount = amountWithoutVat * selectedVatRate.RatePercent / 100;
-
-                        AccountingEntry materialEntry = new AccountingEntry
-                        {
-                            Id = accountingEntries.Count + 1,
-                            Date = selectedDocument.Date,
-                            DocumentId = selectedDocument.Id,
-                            DocumentType = "ReceiptDocument",
-                            DebitAccount = account201,
-                            CreditAccount = account631,
-                            Amount = amountWithoutVat,
-                            Description = "Оприбуткування сировини"
-                        };
-
-                        accountingEntries.Add(materialEntry);
-
-                        AccountingEntry vatEntry = new AccountingEntry
-                        {
-                            Id = accountingEntries.Count + 1,
-                            Date = selectedDocument.Date,
-                            DocumentId = selectedDocument.Id,
-                            DocumentType = "ReceiptDocument",
-                            DebitAccount = account641,
-                            CreditAccount = account631,
-                            Amount = vatAmount,
-                            Description = "Податковий кредит з ПДВ"
-                        };
-
-                        accountingEntries.Add(vatEntry);
-
-                        selectedDocument.Status = DocumentStatus.Posted;
-
-                        Console.WriteLine("Документ проведено.");
-                        Console.WriteLine("Створено проводки:");
-                        Console.WriteLine($"Дт {account201.Code} Кт {account631.Code} — {amountWithoutVat}");
-                        Console.WriteLine($"Дт {account641.Code} Кт {account631.Code} — {vatAmount}");
-                    }
+                    Console.WriteLine("Документ проведено.");
+                    Console.WriteLine($"Створено складських рухів: {postingResult.InventoryMovements.Count}");
+                    Console.WriteLine($"Створено проводок: {postingResult.AccountingEntries.Count}");
                 }
             }
         }
