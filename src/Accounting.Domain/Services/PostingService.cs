@@ -41,6 +41,9 @@ namespace Accounting.Domain.Services
 
                 result.InventoryMovements.Add(movement);
 
+                decimal amountWithoutVat = line.GetAmount();
+                decimal vatAmount = line.GetVatAmount();
+
                 AccountingEntry entry = new AccountingEntry
                 {
                     Date = document.Date,
@@ -56,11 +59,34 @@ namespace Accounting.Domain.Services
                         Code = "631",
                         Name = "Розрахунки з постачальниками"
                     },
-                    Amount = line.GetAmount(),
+                    Amount = amountWithoutVat,
                     Description = $"Поступлення: {line.Item.Name}"
                 };
 
                 result.AccountingEntries.Add(entry);
+
+                if (vatAmount > 0)
+                {
+                    AccountingEntry vatEntry = new AccountingEntry
+                    {
+                        Date = document.Date,
+                        DocumentId = document.Id,
+                        DocumentType = "ReceiptDocument",
+                        DebitAccount = new Account
+                        {
+                            Code = "641",
+                            Name = "Податковий кредит"
+                        },
+                        CreditAccount = new Account
+                        {
+                            Code = "631",
+                            Name = "Розрахунки з постачальниками"
+                        },
+                        Amount = vatAmount,
+                        Description = $"ПДВ: {line.Item.Name}"
+                    };
+                    result.AccountingEntries.Add(vatEntry);
+                }
             }
             return result;
         }

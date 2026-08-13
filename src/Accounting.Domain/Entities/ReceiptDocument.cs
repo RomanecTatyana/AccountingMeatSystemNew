@@ -36,6 +36,23 @@ namespace Accounting.Domain.Entities
 
             return totalQuantity;
         }
+        public decimal GetTotalVatAmount()
+        {
+            decimal totalVatAmount = 0;
+
+            foreach (ReceiptLine line in Lines)
+            {
+                totalVatAmount += line.GetVatAmount();
+            }
+
+            return totalVatAmount;
+        }
+
+        public decimal GetTotalAmountWithVat()
+        {
+            return GetTotalAmount() + GetTotalVatAmount();
+
+        }
         public List<string> Validate()
         {
             List<string> errors = new List<string>();

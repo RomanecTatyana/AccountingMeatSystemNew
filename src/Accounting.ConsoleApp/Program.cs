@@ -561,10 +561,17 @@ while (true)
 
                     foreach (ReceiptLine line in document.Lines)
                     {
-                        Console.WriteLine($"   {line.Id}. {line.Item.Name}, партія {line.BatchNumber}, {line.Quantity} {line.Item.Unit} × {line.Price} = {line.GetAmount()}");
+                        Console.WriteLine(
+                            $"   {line.Id}. {line.Item.Name}, партія {line.BatchNumber}, " +
+                            $"{line.Quantity} {line.Item.Unit} × {line.Price} = {line.GetAmount()}, " +
+                            $"ПДВ {line.VatRate.RatePercent}% = {line.GetVatAmount()}, " +
+                            $"Разом = {line.GetAmountWithVat()}"
+);
                     }
 
-                    Console.WriteLine($"   Загальна сума: {document.GetTotalAmount()}");
+                    Console.WriteLine($"   Сума без ПДВ: {document.GetTotalAmount()}");
+                    Console.WriteLine($"   Сума ПДВ: {document.GetTotalVatAmount()}");
+                    Console.WriteLine($"   Сума з ПДВ: {document.GetTotalAmountWithVat()}");
                 }
 
                 Console.WriteLine();
@@ -655,6 +662,27 @@ while (true)
                         CultureInfo.InvariantCulture
                     );
 
+                    Console.WriteLine();
+                    Console.WriteLine("Оберіть ставку ПДВ:");
+
+                    foreach (VatRate vatRate in vatRates)
+                    {
+                        Console.WriteLine($"{vatRate.Id}. {vatRate.Name}: {vatRate.RatePercent}%");
+                    }
+
+                    Console.Write("Введіть Id ставки ПДВ: ");
+                    int vatRateId = int.Parse(Console.ReadLine()!);
+
+                    VatRate? selectedVatRate = null;
+
+                    foreach (VatRate vatRate in vatRates)
+                    {
+                        if (vatRate.Id == vatRateId)
+                        {
+                            selectedVatRate = vatRate;
+                        }
+                    }
+
                     if (string.IsNullOrWhiteSpace(batchNumber))
                     {
                         Console.WriteLine("Номер партії не може бути порожнім.");
@@ -666,6 +694,10 @@ while (true)
                     else if (price <= 0)
                     {
                         Console.WriteLine("Ціна повинна бути більше нуля.");
+                    }
+                    else if (selectedVatRate == null)
+                    {
+                        Console.WriteLine("Ставку ПДВ з таким Id не знайдено.");
                     }
                     else
                     {
@@ -679,7 +711,8 @@ while (true)
                             Item = selectedItem,
                             BatchNumber = batchNumber,
                             Quantity = quantity,
-                            Price = price
+                            Price = price,
+                            VatRate = selectedVatRate
                         };
 
                         selectedDocument.Lines.Add(line);
