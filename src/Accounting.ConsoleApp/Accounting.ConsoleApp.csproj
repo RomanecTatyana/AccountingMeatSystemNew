@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Accounting.Domain\Accounting.Domain.csproj" />
+    <ProjectReference Include="..\Accounting.Infrastructure\Accounting.Infrastructure.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

@@ -5,7 +5,8 @@ using Accounting.Domain.Entities;
 using Accounting.Domain.Enums;
 using Accounting.Domain.Inventory;
 using Accounting.Domain.Services;
-
+using Accounting.Infrastructure.Data;
+using System.Linq;
 
 Console.InputEncoding = Encoding.UTF8;
 Console.OutputEncoding = Encoding.UTF8;
@@ -208,6 +209,7 @@ while (true)
     Console.WriteLine("15. Змінити статус надходження на Posted");
     Console.WriteLine("16. Скасувати документ надходження");
     Console.WriteLine("17. Показати проводки");
+    Console.WriteLine("19. Тест запису номенклатури в базу");
     Console.WriteLine("0 Вийти");
     Console.WriteLine();
 
@@ -988,6 +990,46 @@ while (true)
                     $"{entry.Description}"
                 );
             }
+        }
+    }
+    else if (choice == "19")
+    {
+        Console.WriteLine("=== Тест запису номенклатури в базу ===");
+
+        AppDbContextFactory factory = new AppDbContextFactory();
+
+        using AppDbContext db = factory.CreateDbContext(Array.Empty<string>());
+
+        string testCode = "TEST-001";
+
+        bool alreadyExists = db.Items.Any(item => item.Code == testCode);
+
+        if (alreadyExists)
+        {
+            Console.WriteLine("Тестова номенклатура вже є в базі.");
+        }
+        else
+        {
+            Item testItem = new Item
+            {
+                Code = testCode,
+                Name = "Тестова свинина з PostgreSQL",
+                Unit = "кг",
+                Group = "Сировина"
+            };
+
+            db.Items.Add(testItem);
+            db.SaveChanges();
+
+            Console.WriteLine("Тестову номенклатуру записано в базу.");
+        }
+
+        Console.WriteLine();
+        Console.WriteLine("=== Номенклатура з бази ===");
+
+        foreach (Item item in db.Items.OrderBy(item => item.Code))
+        {
+            Console.WriteLine($"{item.Id}. {item.Code} — {item.Name}, {item.Unit}, {item.Group}");
         }
     }
     else if (choice == "0")
