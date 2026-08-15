@@ -11,6 +11,15 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
+app.MapGet("/api/health", () =>
+{
+    return Results.Ok(new
+    {
+        Status = "OK",
+        Service = "Accounting.Api",
+        Message = "Accounting API is running"
+    });
+});
 
 var summaries = new[]
 {
