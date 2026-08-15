@@ -1,8 +1,28 @@
+using Accounting.Infrastructure.Data;
+using Accounting.Infrastructure.Repositories;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+string? connectionString = Environment.GetEnvironmentVariable("ACCOUNTING_MEAT_CONNECTION_STRING");
+
+if (string.IsNullOrWhiteSpace(connectionString))
+{
+    throw new InvalidOperationException(
+        "Environment variable ACCOUNTING_MEAT_CONNECTION_STRING is not set."
+    );
+}
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+{
+    options.UseNpgsql(connectionString);
+});
+
+builder.Services.AddScoped<ItemRepository>();
 
 var app = builder.Build();
 
@@ -18,6 +38,18 @@ app.MapGet("/api/health", () =>
         Status = "OK",
         Service = "Accounting.Api",
         Message = "Accounting API is running"
+    });
+});
+
+app.MapGet("/api/health/db", async (AppDbContext db) =>
+{
+    bool canConnect = await db.Database.CanConnectAsync();
+
+    return Results.Ok(new
+    {
+        Status = canConnect ? "OK" : "ERROR",
+        Database = "accounting_meat_dev",
+        CanConnect = canConnect
     });
 });
 
