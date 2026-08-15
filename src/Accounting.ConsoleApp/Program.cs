@@ -7,6 +7,7 @@ using Accounting.Domain.Inventory;
 using Accounting.Domain.Services;
 using Accounting.Infrastructure.Data;
 using System.Linq;
+using Accounting.Infrastructure.Repositories;
 
 Console.InputEncoding = Encoding.UTF8;
 Console.OutputEncoding = Encoding.UTF8;
@@ -1000,9 +1001,11 @@ while (true)
 
         using AppDbContext db = factory.CreateDbContext(Array.Empty<string>());
 
+        ItemRepository itemRepository = new ItemRepository(db);
+
         string testCode = "TEST-001";
 
-        bool alreadyExists = db.Items.Any(item => item.Code == testCode);
+        bool alreadyExists = itemRepository.ExistsByCode(testCode);
 
         if (alreadyExists)
         {
@@ -1018,8 +1021,7 @@ while (true)
                 Group = "Сировина"
             };
 
-            db.Items.Add(testItem);
-            db.SaveChanges();
+            itemRepository.Add(testItem);
 
             Console.WriteLine("Тестову номенклатуру записано в базу.");
         }
@@ -1027,7 +1029,9 @@ while (true)
         Console.WriteLine();
         Console.WriteLine("=== Номенклатура з бази ===");
 
-        foreach (Item item in db.Items.OrderBy(item => item.Code))
+        List<Item> itemsFromDatabase = itemRepository.GetAll();
+
+        foreach (Item item in itemsFromDatabase)
         {
             Console.WriteLine($"{item.Id}. {item.Code} — {item.Name}, {item.Unit}, {item.Group}");
         }
