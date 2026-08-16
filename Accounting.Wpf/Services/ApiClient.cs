@@ -35,11 +35,46 @@ namespace Accounting.Wpf.Services
 
             return items;
         }
+
+        public async Task<(bool IsSuccess, string ErrorMessage, Item? CreatedItem)> CreateItemAsync(CreateItemRequest request)
+        {
+            HttpResponseMessage response = await httpClient.PostAsJsonAsync("/api/items", request);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                string errorText = await response.Content.ReadAsStringAsync();
+
+                return (
+                    false,
+                    string.IsNullOrWhiteSpace(errorText)
+                        ? $"Помилка API: {response.StatusCode}"
+                        : errorText,
+                    null
+                );
+            }
+
+            Item? createdItem = await response.Content.ReadFromJsonAsync<Item>();
+
+            return (true, "", createdItem);
+        }
     }
     public class HealthResponse
     {
         public string Status { get; set; } = "";
         public string Service { get; set; } = "";
         public string Message { get; set; } = "";
+    }
+
+    public class CreateItemRequest
+    {
+        public string Code { get; set; } = "";
+        public string Name { get; set; } = "";
+        public string FullName { get; set; } = "";
+        public string Article { get; set; } = "";
+        public string Barcode { get; set; } = "";
+        public string Unit { get; set; } = "";
+        public string GroupName { get; set; } = "";
+        public string ItemType { get; set; } = "";
+        public string Comment { get; set; } = "";
     }
 }
