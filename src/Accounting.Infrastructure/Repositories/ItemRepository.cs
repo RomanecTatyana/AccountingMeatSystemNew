@@ -38,5 +38,29 @@ namespace Accounting.Infrastructure.Repositories
             db.Items.Add(item);
             db.SaveChanges();
         }
+
+        public string GetNextCode()
+        {
+            List<Item> items = db.Items
+                .Where(item => !item.IsDeleted)
+                .ToList();
+
+            int maxCode = 0;
+
+            foreach (Item item in items)
+            {
+                if (int.TryParse(item.Code, out int numericCode))
+                {
+                    if (numericCode > maxCode)
+                    {
+                        maxCode = numericCode;
+                    }
+                }
+            }
+
+            int nextCode = maxCode + 1;
+
+            return nextCode.ToString("D6");
+        }
     }
 }

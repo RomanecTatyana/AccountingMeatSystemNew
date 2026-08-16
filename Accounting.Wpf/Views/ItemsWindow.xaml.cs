@@ -21,5 +21,20 @@ namespace Accounting.Wpf.Views
         {
             Close();
         }
+
+        private async void AddButton_Click(object sender, RoutedEventArgs e)
+        {
+            ItemCardWindow itemCardWindow = new ItemCardWindow
+            {
+                Owner = this
+            };
+
+            bool? result = itemCardWindow.ShowDialog();
+
+            if (result == true && DataContext is ItemsViewModel viewModel)
+            {
+                await viewModel.LoadItemsCommand.ExecuteAsync(null);
+            }
+        }
     }
 }

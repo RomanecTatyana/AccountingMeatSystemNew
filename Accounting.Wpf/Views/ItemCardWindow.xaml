@@ -1,0 +1,174 @@
+﻿<Window x:Class="Accounting.Wpf.Views.ItemCardWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Картка номенклатури"
+        Height="680"
+        Width="720"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        Background="{StaticResource AppBackgroundBrush}"
+        FontFamily="Segoe UI"
+        FontSize="14">
+
+    <Grid Margin="20">
+        <Border Style="{StaticResource PageCardStyle}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Заголовок -->
+                <StackPanel Grid.Row="0" Margin="0,0,0,20">
+                    <TextBlock Text="Картка номенклатури"
+                               Style="{StaticResource PageTitleStyle}"/>
+
+                    <TextBlock Text="Створення нової позиції довідника"
+                               Style="{StaticResource PageSubtitleStyle}"
+                               Margin="0,4,0,0"/>
+                </StackPanel>
+
+                <!-- Поля карточки -->
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="150"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0"
+                               Grid.Column="0"
+                               Text="Код:"
+                               Style="{StaticResource FormLabelStyle}"/>
+
+                    <TextBox Grid.Row="0"
+                             Grid.Column="1"
+                             Text="Буде присвоєно автоматично"
+                             IsEnabled="False"/>
+
+                    <TextBlock Grid.Row="1"
+                               Grid.Column="0"
+                               Text="Назва:"
+                               Style="{StaticResource FormLabelStyle}"/>
+
+                    <TextBox Grid.Row="1"
+                             Grid.Column="1"
+                             x:Name="NameTextBox"/>
+
+                    <TextBlock Grid.Row="2"
+                               Grid.Column="0"
+                               Text="Повна назва:"
+                               Style="{StaticResource FormLabelStyle}"/>
+
+                    <TextBox Grid.Row="2"
+                             Grid.Column="1"
+                             x:Name="FullNameTextBox"/>
+
+                    <TextBlock Grid.Row="3"
+                               Grid.Column="0"
+                               Text="Артикул:"
+                               Style="{StaticResource FormLabelStyle}"/>
+
+                    <TextBox Grid.Row="3"
+                             Grid.Column="1"
+                             x:Name="ArticleTextBox"/>
+
+                    <TextBlock Grid.Row="4"
+                               Grid.Column="0"
+                               Text="Штрихкод:"
+                               Style="{StaticResource FormLabelStyle}"/>
+
+                    <TextBox Grid.Row="4"
+                             Grid.Column="1"
+                             x:Name="BarcodeTextBox"/>
+
+                    <TextBlock Grid.Row="5"
+                               Grid.Column="0"
+                               Text="Одиниця виміру:"
+                               Style="{StaticResource FormLabelStyle}"/>
+
+                    <TextBox Grid.Row="5"
+                             Grid.Column="1"
+                             x:Name="UnitTextBox"
+                             Text="кг"/>
+
+                    <TextBlock Grid.Row="6"
+                               Grid.Column="0"
+                               Text="Група:"
+                               Style="{StaticResource FormLabelStyle}"/>
+
+                    <TextBox Grid.Row="6"
+                             Grid.Column="1"
+                             x:Name="GroupNameTextBox"
+                             Text="Сировина"/>
+
+                    <TextBlock Grid.Row="7"
+                               Grid.Column="0"
+                               Text="Тип:"
+                               Style="{StaticResource FormLabelStyle}"/>
+
+                    <ComboBox Grid.Row="7"
+                              Grid.Column="1"
+                              x:Name="ItemTypeComboBox">
+                        <ComboBoxItem Content="Сировина"/>
+                        <ComboBoxItem Content="Готова продукція"/>
+                        <ComboBoxItem Content="Матеріал"/>
+                        <ComboBoxItem Content="Тара"/>
+                        <ComboBoxItem Content="Послуга"/>
+                    </ComboBox>
+
+                    <TextBlock Grid.Row="8"
+                               Grid.Column="0"
+                               Text="Коментар:"
+                               Style="{StaticResource FormLabelStyle}"
+                               VerticalAlignment="Top"
+                               Margin="0,5,10,10"/>
+
+                    <TextBox Grid.Row="8"
+                             Grid.Column="1"
+                             x:Name="CommentTextBox"
+                             Height="90"
+                             TextWrapping="Wrap"
+                             AcceptsReturn="True"
+                             VerticalScrollBarVisibility="Auto"/>
+
+                    <TextBlock Grid.Row="9"
+                               Grid.Column="0"
+                               Grid.ColumnSpan="2"
+                               x:Name="ErrorTextBlock"
+                               Style="{StaticResource ErrorTextStyle}"
+                               Margin="0,10,0,0"/>
+                </Grid>
+
+                <!-- Кнопки -->
+                <StackPanel Grid.Row="2"
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Right"
+                            Margin="0,20,0,0">
+
+                    <Button Content="Скасувати"
+                            Style="{StaticResource SecondaryButtonStyle}"
+                            Margin="0,0,10,0"
+                            Click="CancelButton_Click"/>
+
+                    <Button Content="Записати"
+                            Style="{StaticResource PrimaryButtonStyle}"
+                            Click="SaveButton_Click"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

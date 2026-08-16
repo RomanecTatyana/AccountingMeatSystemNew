@@ -1,128 +1,131 @@
 ﻿<Window x:Class="Accounting.Wpf.Views.ItemsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Accounting.Wpf"
-        mc:Ignorable="d"
-        Title="Довідник номенклатури" Height="500" Width="800">
-    <Grid Margin="10">
+        Title="Довідник номенклатури"
+        WindowState="Maximized"
+        Background="{StaticResource AppBackgroundBrush}"
+        FontFamily="Segoe UI"
+        FontSize="14">
+
+    <Grid Margin="20">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0">
-            <TextBlock Text="Довідник номенклатури"
-                       FontSize="28"
-                       FontWeight="Bold" />
-        </StackPanel>
+        <!-- Верхня панель -->
+        <Border Grid.Row="0"
+                Style="{StaticResource PageCardStyle}"
+                Margin="0,0,0,15">
 
-        <DataGrid Grid.Row="1"
-          x:Name="ItemsDataGrid"
-          ItemsSource="{Binding Items}"
-          AutoGenerateColumns="False"
-          Margin="10">
+            <DockPanel LastChildFill="False">
 
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Код"
-                            Binding="{Binding Code}"
-                            Width="80"/>
+                <StackPanel DockPanel.Dock="Left">
+                    <TextBlock Text="Довідник номенклатури"
+                               Style="{StaticResource PageTitleStyle}"/>
 
-                <DataGridTextColumn Header="Назва"
-                            Binding="{Binding Name}"
-                            Width="*"/>
+                    <TextBlock Text="Сировина, готова продукція, матеріали, тара та послуги"
+                               Style="{StaticResource PageSubtitleStyle}"
+                               Margin="0,4,0,0"/>
+                </StackPanel>
 
-                <DataGridTextColumn Header="Одиниця"
-                            Binding="{Binding Unit}"
-                            Width="100"/>
+                <StackPanel DockPanel.Dock="Right"
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center">
 
-                <DataGridTextColumn Header="Група"
-                            Binding="{Binding GroupName}"
-                            Width="180"/>
-                <DataGridTextColumn Header="Артикул" Binding="{Binding Article}" Width="100"/>
-                <DataGridTextColumn Header="Штрихкод" Binding="{Binding Barcode}" Width="120"/>
-                <DataGridTextColumn Header="Тип" Binding="{Binding ItemType}" Width="140"/>
-            </DataGrid.Columns>
+                    <Button Content="Оновити"
+                            Style="{StaticResource SecondaryButtonStyle}"
+                            Command="{Binding LoadItemsCommand}"
+                            Margin="0,0,10,0"/>
 
-        </DataGrid>
+                    <Button Content="Додати"
+                            Style="{StaticResource PrimaryButtonStyle}"
+                            Click="AddButton_Click"
+                            Margin="0,0,10,0"/>
 
-        <StackPanel Grid.Row="2" Orientation="Vertical">
-            <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                <TextBlock Text="Код:"
-                    Width="130"
-                    VerticalAlignment="Top"/>
-                <TextBox x:Name="CodeTextBox"
-                    Text="{Binding NewCode, UpdateSourceTrigger=PropertyChanged}"
-                    Width="250"
-                    TextWrapping="Wrap"
-                    AcceptsReturn="True"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                <TextBlock Text="Назва:"
-                    Width="130"
-                    VerticalAlignment="Top"/>
-                <TextBox x:Name="NameTextBox" 
-                    Text="{Binding NewName, UpdateSourceTrigger=PropertyChanged}"
-                    Width="250"
-                    TextWrapping="Wrap"
-                    AcceptsReturn="True"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                <TextBlock Text="Одиниця:"
-                    Width="130"
-                    VerticalAlignment="Top"/>
-                <TextBox x:Name="UnitTextBox" 
-                    Text="{Binding NewUnit, UpdateSourceTrigger=PropertyChanged}"
-                    Width="250"
-                    TextWrapping="Wrap"
-                    AcceptsReturn="True"/> 
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Група:"
-                    Width="130"
-                    VerticalAlignment="Top"/>
-                <TextBox x:Name="GroupTextBox" 
-                    Text="{Binding NewGroup, UpdateSourceTrigger=PropertyChanged}"
-                    Width="250"
-                    TextWrapping="Wrap"
-                    AcceptsReturn="True"/>
-            </StackPanel>
-        </StackPanel>
-        
-        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
-            <TextBlock Text="{Binding StatusMessage}"
-                    Margin="10"
-                    FontWeight="SemiBold" />
-            <TextBlock Text="{Binding ErrorMessage}"
-                    Margin="10"
-                    FontWeight="SemiBold" />
-            <Button Content="Додати" 
-                    Width="100" 
-                    Height="35" 
-                    Margin="0,0,10,0"
-                    Command="{Binding AddItemCommand}"/>
-            <Button Content="Змінити"
-                    Width="100"
-                    Height="35" 
-                    Margin="0,0,10,0"/>
-            <Button Content="Зберегти"
-                    Width="100"
-                    Height="35" 
-                    Margin="0,0,10,0"
-                    Command="{Binding SaveCommand}"/>
-            <Button Content="Закрити" 
-                    Width="100" 
-                    Height="35" 
-                    Margin="0,0,10,0"
-                    Click="CloseButton_Click"/>
-            <Button Content="Оновити"
-                    Command="{Binding LoadItemsCommand}"
-                    Height="35"
-                    Margin="0,0,10,10"/>
-        </StackPanel>
+                    <Button Content="Змінити"
+                            Style="{StaticResource SecondaryButtonStyle}"
+                            Margin="0,0,10,0"/>
 
+                    <Button Content="Закрити"
+                            Style="{StaticResource SecondaryButtonStyle}"
+                            Click="CloseButton_Click"/>
+                </StackPanel>
+            </DockPanel>
+        </Border>
+
+        <!-- Таблиця -->
+        <Border Grid.Row="1"
+                Style="{StaticResource PageCardStyle}"
+                Margin="0,0,0,15">
+
+            <DataGrid x:Name="ItemsDataGrid"
+                      ItemsSource="{Binding Items}">
+
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Код"
+                                        Binding="{Binding Code}"
+                                        Width="90"/>
+
+                    <DataGridTextColumn Header="Назва"
+                                        Binding="{Binding Name}"
+                                        Width="260"/>
+
+                    <DataGridTextColumn Header="Повна назва"
+                                        Binding="{Binding FullName}"
+                                        Width="300"/>
+
+                    <DataGridTextColumn Header="Артикул"
+                                        Binding="{Binding Article}"
+                                        Width="120"/>
+
+                    <DataGridTextColumn Header="Штрихкод"
+                                        Binding="{Binding Barcode}"
+                                        Width="140"/>
+
+                    <DataGridTextColumn Header="Од."
+                                        Binding="{Binding Unit}"
+                                        Width="70"/>
+
+                    <DataGridTextColumn Header="Група"
+                                        Binding="{Binding GroupName}"
+                                        Width="180"/>
+
+                    <DataGridTextColumn Header="Тип"
+                                        Binding="{Binding ItemType}"
+                                        Width="160"/>
+
+                    <DataGridCheckBoxColumn Header="Активна"
+                                            Binding="{Binding IsActive}"
+                                            Width="90"/>
+
+                    <DataGridTextColumn Header="Коментар"
+                                        Binding="{Binding Comment}"
+                                        Width="*"/>
+                </DataGrid.Columns>
+
+            </DataGrid>
+        </Border>
+
+        <!-- Нижня панель статусів -->
+        <Border Grid.Row="3"
+                Style="{StaticResource PageCardStyle}">
+
+            <DockPanel>
+                <StackPanel DockPanel.Dock="Left"
+                            Orientation="Vertical">
+
+                    <TextBlock Text="{Binding StatusMessage}"
+                               Style="{StaticResource StatusTextStyle}"/>
+
+                    <TextBlock Text="{Binding ErrorMessage}"
+                               Style="{StaticResource ErrorTextStyle}"
+                               Margin="0,4,0,0"/>
+                </StackPanel>
+            </DockPanel>
+        </Border>
     </Grid>
 </Window>
