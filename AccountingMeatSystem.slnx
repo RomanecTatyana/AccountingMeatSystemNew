@@ -2,7 +2,6 @@
   <Folder Name="/src/">
     <Project Path="Accounting.Wpf/Accounting.Wpf.csproj" Id="be0dc301-7a1b-4636-9ac8-cf9d89219df4" />
     <Project Path="src/Accounting.Api/Accounting.Api.csproj" />
-    <Project Path="src/Accounting.ConsoleApp/Accounting.ConsoleApp.csproj" />
     <Project Path="src/Accounting.Domain/Accounting.Domain.csproj" />
     <Project Path="src/Accounting.Infrastructure/Accounting.Infrastructure.csproj" />
   </Folder>

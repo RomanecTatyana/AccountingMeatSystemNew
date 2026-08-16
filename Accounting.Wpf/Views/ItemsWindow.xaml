@@ -40,7 +40,7 @@
                             Width="100"/>
 
                 <DataGridTextColumn Header="Група"
-                            Binding="{Binding Group}"
+                            Binding="{Binding GroupName}"
                             Width="180"/>
             </DataGrid.Columns>
 

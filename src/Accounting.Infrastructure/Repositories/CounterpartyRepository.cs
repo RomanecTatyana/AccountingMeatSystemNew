@@ -15,6 +15,7 @@ namespace Accounting.Infrastructure.Repositories
         public List<Counterparty> GetAll()
         {
             return db.Counterparties
+                .Where(counterparty => !counterparty.IsDeleted)
                 .OrderBy(counterparty => counterparty.Code)
                 .ToList();
         }
@@ -28,7 +29,7 @@ namespace Accounting.Infrastructure.Repositories
         public bool ExistsByCode(string code)
         {
             return db.Counterparties
-                .Any(counterparty => counterparty.Code == code);
+                .Any(counterparty => counterparty.Code == code && !counterparty.IsDeleted);
         }
 
         public void Add(Counterparty counterparty)

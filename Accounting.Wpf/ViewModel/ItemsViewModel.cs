@@ -37,21 +37,21 @@ namespace Accounting.Wpf.ViewModels
                     Code = "001",
                     Name = "Свинина",
                     Unit = "кг",
-                    Group = "Сировина"
+                    GroupName = "Сировина"
                 },
                 new Item
                 {
                     Code = "002",
                     Name = "Яловичина",
                     Unit = "кг",
-                    Group = "Сировина"
+                    GroupName = "Сировина"
                 },
                 new Item
                 {
                     Code = "003",
                     Name = "Сіль",
                     Unit = "кг",
-                    Group = "Матеріали"
+                    GroupName = "Матеріали"
                 }
             };
         }
@@ -68,7 +68,7 @@ namespace Accounting.Wpf.ViewModels
                 Code = NewCode,
                 Name = NewName,
                 Unit = NewUnit,
-                Group = NewGroup
+                GroupName = NewGroup
             });
 
             NewCode = "";

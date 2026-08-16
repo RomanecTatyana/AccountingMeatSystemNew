@@ -35,7 +35,7 @@
                         Width="*"/>
 
                 <DataGridTextColumn Header="Тип"
-                        Binding="{Binding Type}"
+                        Binding="{Binding CounterpartyType}"
                         Width="100"/>
 
                 <DataGridTextColumn Header="ЄДРПОУ"

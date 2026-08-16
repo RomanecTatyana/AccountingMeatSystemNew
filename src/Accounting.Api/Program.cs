@@ -63,11 +63,6 @@ app.MapGet("/api/items", (ItemRepository itemRepository) =>
     return Results.Ok(items);
 });
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
 app.MapPost("/api/items", (CreateItemRequest request, ItemRepository itemRepository) =>
 {
     if (string.IsNullOrWhiteSpace(request.Code))
@@ -85,7 +80,7 @@ app.MapPost("/api/items", (CreateItemRequest request, ItemRepository itemReposit
         return Results.BadRequest("Одиниця виміру не може бути порожньою.");
     }
 
-    if (string.IsNullOrWhiteSpace(request.Group))
+    if (string.IsNullOrWhiteSpace(request.GroupName))
     {
         return Results.BadRequest("Група номенклатури не може бути порожньою.");
     }
@@ -101,28 +96,21 @@ app.MapPost("/api/items", (CreateItemRequest request, ItemRepository itemReposit
     {
         Code = request.Code.Trim(),
         Name = request.Name.Trim(),
+        FullName = request.FullName.Trim(),
+        Article = request.Article.Trim(),
+        Barcode = request.Barcode.Trim(),
         Unit = request.Unit.Trim(),
-        Group = request.Group.Trim()
+        GroupName = request.GroupName.Trim(),
+        ItemType = request.ItemType.Trim(),
+        Comment = request.Comment.Trim(),
+        IsActive = true,
+        IsDeleted = false
     };
 
     itemRepository.Add(item);
 
     return Results.Created($"/api/items/{item.Id}", item);
 });
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
 
 app.MapGet("/api/warehouses", (WarehouseRepository warehouseRepository) =>
 {
@@ -143,7 +131,7 @@ app.MapPost("/api/warehouses", (CreateWarehouseRequest request, WarehouseReposit
         return Results.BadRequest("Назва складу не може бути порожньою.");
     }
 
-    if (string.IsNullOrWhiteSpace(request.Type))
+    if (string.IsNullOrWhiteSpace(request.WarehouseType))
     {
         return Results.BadRequest("Тип складу не може бути порожнім.");
     }
@@ -159,7 +147,11 @@ app.MapPost("/api/warehouses", (CreateWarehouseRequest request, WarehouseReposit
     {
         Code = request.Code.Trim(),
         Name = request.Name.Trim(),
-        Type = request.Type.Trim()
+        FullName = request.FullName.Trim(),
+        WarehouseType = request.WarehouseType.Trim(),
+        Address = request.Address.Trim(),
+        ResponsiblePerson = request.ResponsiblePerson.Trim(),
+        Comment = request.Comment.Trim()
     };
 
     warehouseRepository.Add(warehouse);
@@ -187,7 +179,7 @@ app.MapPost("/api/counterparties", (CreateCounterpartyRequest request, Counterpa
         return Results.BadRequest("Назва контрагента не може бути порожньою.");
     }
 
-    if (string.IsNullOrWhiteSpace(request.Type))
+    if (string.IsNullOrWhiteSpace(request.CounterpartyType))
     {
         return Results.BadRequest("Тип контрагента не може бути порожнім.");
     }
@@ -208,8 +200,16 @@ app.MapPost("/api/counterparties", (CreateCounterpartyRequest request, Counterpa
     {
         Code = request.Code.Trim(),
         Name = request.Name.Trim(),
-        Type = request.Type.Trim(),
-        TaxNumber = request.TaxNumber.Trim()
+        FullName = request.FullName.Trim(),
+        CounterpartyType = request.CounterpartyType.Trim(),
+        TaxNumber = request.TaxNumber.Trim(),
+        VatNumber = request.VatNumber.Trim(),
+        IsVatPayer = request.IsVatPayer,
+        Phone = request.Phone.Trim(),
+        Email = request.Email.Trim(),
+        LegalAddress = request.LegalAddress.Trim(),
+        ActualAddress = request.ActualAddress.Trim(),
+        Comment = request.Comment.Trim()
     };
 
     counterpartyRepository.Add(counterparty);
@@ -219,11 +219,37 @@ app.MapPost("/api/counterparties", (CreateCounterpartyRequest request, Counterpa
 
 app.Run();
 
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
-
-record CreateItemRequest(string Code, string Name, string Unit, string Group);
-record CreateWarehouseRequest(string Code, string Name, string Type);
-record CreateCounterpartyRequest(string Code, string Name, string Type, string TaxNumber);
+record CreateItemRequest(
+    string Code,
+    string Name,
+    string FullName,
+    string Article,
+    string Barcode,
+    string Unit,
+    string GroupName,
+    string ItemType,
+    string Comment
+);
+record CreateWarehouseRequest(
+    string Code,
+    string Name,
+    string FullName,
+    string WarehouseType,
+    string Address,
+    string ResponsiblePerson,
+    string Comment
+);
+record CreateCounterpartyRequest(
+    string Code,
+    string Name,
+    string FullName,
+    string CounterpartyType,
+    string TaxNumber,
+    string VatNumber,
+    bool IsVatPayer,
+    string Phone,
+    string Email,
+    string LegalAddress,
+    string ActualAddress,
+    string Comment
+);
