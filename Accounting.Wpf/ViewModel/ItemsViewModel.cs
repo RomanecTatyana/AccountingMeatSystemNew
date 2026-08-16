@@ -63,27 +63,56 @@ namespace Accounting.Wpf.ViewModels
         }
 
         [RelayCommand]
-        private void AddItem()
+        private async Task AddItemAsync()
         {
             if (!ValidateNewItem())
             {
-                StatusMessage = "";
                 return;
             }
-            Items.Add(new Item
-            {
-                Code = NewCode,
-                Name = NewName,
-                Unit = NewUnit,
-                GroupName = NewGroup
-            });
 
-            NewCode = "";
-            NewName = "";
-            NewUnit = "";
-            NewGroup = "";
-            ErrorMessage = "";
-            StatusMessage = "Позицію додано";
+            try
+            {
+                ErrorMessage = "";
+                StatusMessage = "Збереження номенклатури...";
+
+                ApiClient apiClient = new ApiClient();
+
+                CreateItemRequest request = new CreateItemRequest
+                {
+                    Code = NewCode.Trim(),
+                    Name = NewName.Trim(),
+                    FullName = NewName.Trim(),
+                    Article = "",
+                    Barcode = "",
+                    Unit = NewUnit.Trim(),
+                    GroupName = NewGroup.Trim(),
+                    ItemType = "Сировина",
+                    Comment = ""
+                };
+
+                var result = await apiClient.CreateItemAsync(request);
+
+                if (!result.IsSuccess)
+                {
+                    ErrorMessage = result.ErrorMessage;
+                    StatusMessage = "";
+                    return;
+                }
+
+                NewCode = "";
+                NewName = "";
+                NewUnit = "";
+                NewGroup = "";
+
+                await LoadItemsAsync();
+
+                StatusMessage = "Номенклатуру додано.";
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = $"Не вдалося додати номенклатуру: {ex.Message}";
+                StatusMessage = "";
+            }
         }
 
         [RelayCommand]
