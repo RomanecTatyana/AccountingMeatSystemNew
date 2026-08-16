@@ -65,10 +65,9 @@ app.MapGet("/api/items", (ItemRepository itemRepository) =>
 
 app.MapPost("/api/items", (CreateItemRequest request, ItemRepository itemRepository) =>
 {
-    if (string.IsNullOrWhiteSpace(request.Code))
-    {
-        return Results.BadRequest("Код номенклатури не може бути порожнім.");
-    }
+    string code = string.IsNullOrWhiteSpace(request.Code)
+    ? itemRepository.GetNextCode()
+    : request.Code.Trim();
 
     if (string.IsNullOrWhiteSpace(request.Name))
     {
@@ -85,7 +84,7 @@ app.MapPost("/api/items", (CreateItemRequest request, ItemRepository itemReposit
         return Results.BadRequest("Група номенклатури не може бути порожньою.");
     }
 
-    bool alreadyExists = itemRepository.ExistsByCode(request.Code.Trim());
+    bool alreadyExists = itemRepository.ExistsByCode(code);
 
     if (alreadyExists)
     {
@@ -94,7 +93,7 @@ app.MapPost("/api/items", (CreateItemRequest request, ItemRepository itemReposit
 
     Item item = new Item
     {
-        Code = request.Code.Trim(),
+        Code = code,
         Name = request.Name.Trim(),
         FullName = request.FullName.Trim(),
         Article = request.Article.Trim(),

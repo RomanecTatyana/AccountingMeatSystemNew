@@ -1,9 +1,11 @@
-﻿using System.Collections.ObjectModel;
-using Accounting.Domain.Entities;
+﻿using Accounting.Domain.Entities;
 using Accounting.Wpf.Services;
+using Accounting.Wpf.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows;
 
 namespace Accounting.Wpf.ViewModels
 {
@@ -133,12 +135,6 @@ namespace Accounting.Wpf.ViewModels
 
         private bool ValidateNewItem()
         {
-            if (string.IsNullOrWhiteSpace(NewCode))
-            {
-                ErrorMessage = "Введіть код номенклатури";
-                return false;
-            }
-
             if (string.IsNullOrWhiteSpace(NewName))
             {
                 ErrorMessage = "Введіть назву номенклатури";
