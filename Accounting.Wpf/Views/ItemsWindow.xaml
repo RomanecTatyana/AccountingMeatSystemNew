@@ -42,6 +42,9 @@
                 <DataGridTextColumn Header="Група"
                             Binding="{Binding GroupName}"
                             Width="180"/>
+                <DataGridTextColumn Header="Артикул" Binding="{Binding Article}" Width="100"/>
+                <DataGridTextColumn Header="Штрихкод" Binding="{Binding Barcode}" Width="120"/>
+                <DataGridTextColumn Header="Тип" Binding="{Binding ItemType}" Width="140"/>
             </DataGrid.Columns>
 
         </DataGrid>
@@ -115,6 +118,10 @@
                     Height="35" 
                     Margin="0,0,10,0"
                     Click="CloseButton_Click"/>
+            <Button Content="Оновити"
+                    Command="{Binding LoadItemsCommand}"
+                    Height="30"
+                    Margin="0,0,10,10"/>
         </StackPanel>
 
     </Grid>

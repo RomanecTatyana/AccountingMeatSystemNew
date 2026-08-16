@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using Accounting.Domain.Entities;
+using Accounting.Wpf.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Linq;
@@ -8,7 +9,7 @@ namespace Accounting.Wpf.ViewModels
 {
     public partial class ItemsViewModel : ObservableObject
     {
-        public ObservableCollection<Item> Items { get; set; }
+        public ObservableCollection<Item> Items { get; set; } = new ObservableCollection<Item>();
 
         [ObservableProperty]
         private string newCode = "";
@@ -30,31 +31,37 @@ namespace Accounting.Wpf.ViewModels
 
         public ItemsViewModel()
         {
-            Items = new ObservableCollection<Item>
-            {
-                new Item
-                {
-                    Code = "001",
-                    Name = "Свинина",
-                    Unit = "кг",
-                    GroupName = "Сировина"
-                },
-                new Item
-                {
-                    Code = "002",
-                    Name = "Яловичина",
-                    Unit = "кг",
-                    GroupName = "Сировина"
-                },
-                new Item
-                {
-                    Code = "003",
-                    Name = "Сіль",
-                    Unit = "кг",
-                    GroupName = "Матеріали"
-                }
-            };
+            _ = LoadItemsAsync();
         }
+
+        [RelayCommand]
+        private async Task LoadItemsAsync()
+        {
+            try
+            {
+                ErrorMessage = "";
+                StatusMessage = "Завантаження номенклатури...";
+
+                ApiClient apiClient = new ApiClient();
+
+                List<Item> itemsFromApi = await apiClient.GetItemsAsync();
+
+                Items.Clear();
+
+                foreach (Item item in itemsFromApi)
+                {
+                    Items.Add(item);
+                }
+
+                StatusMessage = $"Завантажено позицій: {Items.Count}";
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = $"Не вдалося завантажити номенклатуру: {ex.Message}";
+                StatusMessage = "";
+            }
+        }
+
         [RelayCommand]
         private void AddItem()
         {
