@@ -54,6 +54,10 @@
                     Click="OpenReceiptWindow_Click"/>
             <Button Content="Звіти" Margin="0,0,10,10" Height="35"/>
             <Button Content="Налаштування" Margin="0,0,10,10" Height="35"/>
+            <Button Content="Перевірити API"
+                    Height="35"
+                    Margin="0,0,10,10"
+                    Click="CheckApiButton_Click"/>
         </StackPanel>
 
         <StackPanel Grid.Row="1" Grid.Column="1">
