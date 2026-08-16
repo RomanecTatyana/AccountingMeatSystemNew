@@ -25,6 +25,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddScoped<ItemRepository>();
 builder.Services.AddScoped<WarehouseRepository>();
+builder.Services.AddScoped<CounterpartyRepository>();
 
 var app = builder.Build();
 
@@ -165,6 +166,57 @@ app.MapPost("/api/warehouses", (CreateWarehouseRequest request, WarehouseReposit
 
     return Results.Created($"/api/warehouses/{warehouse.Id}", warehouse);
 });
+
+app.MapGet("/api/counterparties", (CounterpartyRepository counterpartyRepository) =>
+{
+    List<Counterparty> counterparties = counterpartyRepository.GetAll();
+
+    return Results.Ok(counterparties);
+});
+
+
+app.MapPost("/api/counterparties", (CreateCounterpartyRequest request, CounterpartyRepository counterpartyRepository) =>
+{
+    if (string.IsNullOrWhiteSpace(request.Code))
+    {
+        return Results.BadRequest("Код контрагента не може бути порожнім.");
+    }
+
+    if (string.IsNullOrWhiteSpace(request.Name))
+    {
+        return Results.BadRequest("Назва контрагента не може бути порожньою.");
+    }
+
+    if (string.IsNullOrWhiteSpace(request.Type))
+    {
+        return Results.BadRequest("Тип контрагента не може бути порожнім.");
+    }
+
+    if (string.IsNullOrWhiteSpace(request.TaxNumber))
+    {
+        return Results.BadRequest("Податковий номер не може бути порожнім.");
+    }
+
+    bool alreadyExists = counterpartyRepository.ExistsByCode(request.Code.Trim());
+
+    if (alreadyExists)
+    {
+        return Results.Conflict("Контрагент з таким кодом вже існує.");
+    }
+
+    Counterparty counterparty = new Counterparty
+    {
+        Code = request.Code.Trim(),
+        Name = request.Name.Trim(),
+        Type = request.Type.Trim(),
+        TaxNumber = request.TaxNumber.Trim()
+    };
+
+    counterpartyRepository.Add(counterparty);
+
+    return Results.Created($"/api/counterparties/{counterparty.Id}", counterparty);
+});
+
 app.Run();
 
 record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
@@ -174,3 +226,4 @@ record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
 
 record CreateItemRequest(string Code, string Name, string Unit, string Group);
 record CreateWarehouseRequest(string Code, string Name, string Type);
+record CreateCounterpartyRequest(string Code, string Name, string Type, string TaxNumber);
