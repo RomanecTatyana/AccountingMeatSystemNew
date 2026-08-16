@@ -24,6 +24,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 });
 
 builder.Services.AddScoped<ItemRepository>();
+builder.Services.AddScoped<WarehouseRepository>();
 
 var app = builder.Build();
 
@@ -122,6 +123,48 @@ app.MapGet("/weatherforecast", () =>
 })
 .WithName("GetWeatherForecast");
 
+app.MapGet("/api/warehouses", (WarehouseRepository warehouseRepository) =>
+{
+    List<Warehouse> warehouses = warehouseRepository.GetAll();
+
+    return Results.Ok(warehouses);
+});
+
+app.MapPost("/api/warehouses", (CreateWarehouseRequest request, WarehouseRepository warehouseRepository) =>
+{
+    if (string.IsNullOrWhiteSpace(request.Code))
+    {
+        return Results.BadRequest("Код складу не може бути порожнім.");
+    }
+
+    if (string.IsNullOrWhiteSpace(request.Name))
+    {
+        return Results.BadRequest("Назва складу не може бути порожньою.");
+    }
+
+    if (string.IsNullOrWhiteSpace(request.Type))
+    {
+        return Results.BadRequest("Тип складу не може бути порожнім.");
+    }
+
+    bool alreadyExists = warehouseRepository.ExistsByCode(request.Code.Trim());
+
+    if (alreadyExists)
+    {
+        return Results.Conflict("Склад з таким кодом вже існує.");
+    }
+
+    Warehouse warehouse = new Warehouse
+    {
+        Code = request.Code.Trim(),
+        Name = request.Name.Trim(),
+        Type = request.Type.Trim()
+    };
+
+    warehouseRepository.Add(warehouse);
+
+    return Results.Created($"/api/warehouses/{warehouse.Id}", warehouse);
+});
 app.Run();
 
 record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
@@ -130,3 +173,4 @@ record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
 }
 
 record CreateItemRequest(string Code, string Name, string Unit, string Group);
+record CreateWarehouseRequest(string Code, string Name, string Type);
