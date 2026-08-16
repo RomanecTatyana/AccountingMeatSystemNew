@@ -1,3 +1,4 @@
+using Accounting.Domain.Entities;
 using Accounting.Infrastructure.Data;
 using Accounting.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -53,10 +54,59 @@ app.MapGet("/api/health/db", async (AppDbContext db) =>
     });
 });
 
+
+app.MapGet("/api/items", (ItemRepository itemRepository) =>
+{
+    List<Item> items = itemRepository.GetAll();
+    return Results.Ok(items);
+});
+
 var summaries = new[]
 {
     "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
 };
+
+app.MapPost("/api/items", (CreateItemRequest request, ItemRepository itemRepository) =>
+{
+    if (string.IsNullOrWhiteSpace(request.Code))
+    {
+        return Results.BadRequest("Код номенклатури не може бути порожнім.");
+    }
+
+    if (string.IsNullOrWhiteSpace(request.Name))
+    {
+        return Results.BadRequest("Назва номенклатури не може бути порожньою.");
+    }
+
+    if (string.IsNullOrWhiteSpace(request.Unit))
+    {
+        return Results.BadRequest("Одиниця виміру не може бути порожньою.");
+    }
+
+    if (string.IsNullOrWhiteSpace(request.Group))
+    {
+        return Results.BadRequest("Група номенклатури не може бути порожньою.");
+    }
+
+    bool alreadyExists = itemRepository.ExistsByCode(request.Code.Trim());
+
+    if (alreadyExists)
+    {
+        return Results.Conflict("Номенклатура з таким кодом вже існує.");
+    }
+
+    Item item = new Item
+    {
+        Code = request.Code.Trim(),
+        Name = request.Name.Trim(),
+        Unit = request.Unit.Trim(),
+        Group = request.Group.Trim()
+    };
+
+    itemRepository.Add(item);
+
+    return Results.Created($"/api/items/{item.Id}", item);
+});
 
 app.MapGet("/weatherforecast", () =>
 {
@@ -78,3 +128,5 @@ record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
 {
     public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
 }
+
+record CreateItemRequest(string Code, string Name, string Unit, string Group);
