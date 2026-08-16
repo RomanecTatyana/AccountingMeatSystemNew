@@ -16,6 +16,7 @@ namespace Accounting.Infrastructure.Repositories
         public List<Item> GetAll()
         {
             return db.Items
+                .Where(item => !item.IsDeleted)
                 .OrderBy(item => item.Code)
                 .ToList();
         }
@@ -29,7 +30,7 @@ namespace Accounting.Infrastructure.Repositories
         public bool ExistsByCode(string code)
         {
             return db.Items
-                .Any(item => item.Code == code);
+                .Any(item => item.Code == code && !item.IsDeleted);
         }
 
         public void Add(Item item)

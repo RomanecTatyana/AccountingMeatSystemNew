@@ -27,21 +27,21 @@ namespace Accounting.Wpf.ViewModel
                 {
                     Code = "001",
                     Name = "ТОВ 'Сонячна енергія'",
-                    Type = "Постачальник",
+                    CounterpartyType = "Постачальник",
                     TaxNumber = "1234567890"
                 },
                 new Counterparty
                 {
                     Code = "002",
                     Name = "ТОВ 'Електроенергія плюс'",
-                    Type = "Постачальник",
+                    CounterpartyType = "Постачальник",
                     TaxNumber = "0987654321"
                 },
                 new Counterparty
                 {
                     Code = "003",
                     Name = "ТОВ 'Будівельні матеріали'",
-                    Type = "Покупець",
+                    CounterpartyType = "Покупець",
                     TaxNumber = "1122334455"
                 }
             };

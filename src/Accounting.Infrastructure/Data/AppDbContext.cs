@@ -98,6 +98,101 @@ namespace Accounting.Infrastructure.Data
                     Name = "Собівартість реалізації"
                 }
             );
+            modelBuilder.Entity<Item>()
+                .Property(item => item.Code)
+                .HasMaxLength(20);
+
+            modelBuilder.Entity<Item>()
+                .Property(item => item.Name)
+                .HasMaxLength(200);
+
+            modelBuilder.Entity<Item>()
+                .Property(item => item.FullName)
+                .HasMaxLength(300);
+
+            modelBuilder.Entity<Item>()
+                .Property(item => item.Article)
+                .HasMaxLength(50);
+
+            modelBuilder.Entity<Item>()
+                .Property(item => item.Barcode)
+                .HasMaxLength(50);
+
+            modelBuilder.Entity<Item>()
+                .Property(item => item.Unit)
+                .HasMaxLength(20);
+
+            modelBuilder.Entity<Item>()
+                .Property(item => item.GroupName)
+                .HasMaxLength(100);
+
+            modelBuilder.Entity<Item>()
+                .Property(item => item.ItemType)
+                .HasMaxLength(100);
+
+            modelBuilder.Entity<Warehouse>()
+                .Property(warehouse => warehouse.Code)
+                .HasMaxLength(20);
+
+            modelBuilder.Entity<Warehouse>()
+                .Property(warehouse => warehouse.Name)
+                .HasMaxLength(200);
+
+            modelBuilder.Entity<Warehouse>()
+                .Property(warehouse => warehouse.FullName)
+                .HasMaxLength(300);
+
+            modelBuilder.Entity<Warehouse>()
+                .Property(warehouse => warehouse.WarehouseType)
+                .HasMaxLength(100);
+
+            modelBuilder.Entity<Warehouse>()
+                .Property(warehouse => warehouse.Address)
+                .HasMaxLength(300);
+
+            modelBuilder.Entity<Warehouse>()
+                .Property(warehouse => warehouse.ResponsiblePerson)
+                .HasMaxLength(150);
+
+            modelBuilder.Entity<Counterparty>()
+                .Property(counterparty => counterparty.Code)
+                .HasMaxLength(20);
+
+            modelBuilder.Entity<Counterparty>()
+                .Property(counterparty => counterparty.Name)
+                .HasMaxLength(200);
+
+            modelBuilder.Entity<Counterparty>()
+                .Property(counterparty => counterparty.FullName)
+                .HasMaxLength(300);
+
+            modelBuilder.Entity<Counterparty>()
+                .Property(counterparty => counterparty.CounterpartyType)
+                .HasMaxLength(100);
+
+            modelBuilder.Entity<Counterparty>()
+                .Property(counterparty => counterparty.TaxNumber)
+                .HasMaxLength(20);
+
+            modelBuilder.Entity<Counterparty>()
+                .Property(counterparty => counterparty.VatNumber)
+                .HasMaxLength(30);
+
+            modelBuilder.Entity<Counterparty>()
+                .Property(counterparty => counterparty.Phone)
+                .HasMaxLength(50);
+
+            modelBuilder.Entity<Counterparty>()
+                .Property(counterparty => counterparty.Email)
+                .HasMaxLength(150);
+
+            modelBuilder.Entity<Counterparty>()
+                .Property(counterparty => counterparty.LegalAddress)
+                .HasMaxLength(300);
+
+            modelBuilder.Entity<Counterparty>()
+                .Property(counterparty => counterparty.ActualAddress)
+                .HasMaxLength(300);
         }
     }
 }

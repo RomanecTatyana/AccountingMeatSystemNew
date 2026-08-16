@@ -27,13 +27,13 @@ namespace Accounting.Wpf.ViewModel
                 {
                     Code = "001",
                     Name = "Сировинний склад",
-                    Type = "Сировина"
+                    WarehouseType = "Сировина"
                 },
                 new Warehouse
                 {
                     Code = "002",
                     Name = "Склад готової продукції",
-                    Type = "Готова продукція"
+                    WarehouseType = "Готова продукція"
                 }
             };
         }
