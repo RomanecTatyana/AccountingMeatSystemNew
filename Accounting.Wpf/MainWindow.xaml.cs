@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using Accounting.Wpf.ViewModel;
 using Accounting.Wpf.Views;
+using Accounting.Wpf.Services;
 
 namespace Accounting.Wpf
 {
@@ -33,6 +34,36 @@ namespace Accounting.Wpf
         {
             WarehousesWindow warehousesWindow = new WarehousesWindow();
             warehousesWindow.Show();
+        }
+
+        private async void CheckApiButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                ApiClient apiClient = new ApiClient();
+
+                HealthResponse? health = await apiClient.GetHealthAsync();
+
+                if (health == null)
+                {
+                    MessageBox.Show("API відповів, але відповідь порожня.");
+                    return;
+                }
+
+                MessageBox.Show(
+                    $"Status: {health.Status}\n" +
+                    $"Service: {health.Service}\n" +
+                    $"Message: {health.Message}",
+                    "Перевірка API"
+                );
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"API не відповідає:\n{ex.Message}",
+                    "Помилка підключення до API"
+                );
+            }
         }
     }
 }
